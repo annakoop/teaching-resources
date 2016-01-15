@@ -1,7 +1,6 @@
 \documentclass[12pt]{article}
 \usepackage{fullpage}
 \usepackage{epsf}
-
 \input{commands}
 
 \begin{document}
@@ -36,15 +35,15 @@ University of Alberta, Augustana Faculty
 
 \hrule
 
-\vspace*{1\baselineskip}
+%\vspace*{1\baselineskip}
 
-\noindent
-{\bf Note}
-Please submit your assignment to me by email.
-Most of the questions require you to write small programs,
-however for the written questions please format your answers
-in a single {\em postscript\/} or {\em pdf\/} file.
-Submit all required documents in a zip or tar archive.
+%\noindent
+%{\bf Note}
+%Please submit your assignment to me by email.
+%Most of the questions require you to write small programs,
+%however for the written questions please format your answers
+%in a single {\em postscript\/} or {\em pdf\/} file.
+%Submit all required documents in a zip or tar archive.
 
 
 \vspace*{1\baselineskip}
@@ -53,19 +52,34 @@ Submit all required documents in a zip or tar archive.
 
 
 %%%%%%%%%%%%
-\subsection*{Question 1 \rm(Representation in Propositional Logic---2\%)}
+\subsection*{Question 1 \rm(Circuit Representation in Propositional Logic---2\%)}
+Digital logic circuits map easily onto propositional logic, meaning that reasoning about propositional logic has direct practical application in computer design.
+\begin{center}
+\begin{tabular}[h]{r | l}
+Circuit Design & Propositional Logic \\
+\hline
+circuit & complex sentence\\
+logic gate & connective \\
+input wire & atomic sentence \\
+voltage & truth value
+\end{tabular}
+\end{center}
 
+Write out the formula for the pictured circuit and convert it to conjunctive normal form. Show your steps.
 
 %%%%%%%%%%%%
-\subsection*{Question 2 \rm(Representation in Predicate Logic---4\%)}
+\subsection*{Question 2 \rm(Applied Satisfiability---3\%)}
+A digital circuit that only ever returns 0 is not going to be a terribly useful addition to a circuit board. Describe an algorithm (in words, pseudocode, or your language of choice) that, given a sentence in propositional logic, returns T if there exists an input configuration that results in non-zero output and F if there is no possible input that results in non-zero output.
 
 %%%%%%%%%%%%
-\subsection*{Question 3 \rm(Reasoning---3\%)}
+\subsection*{Question 3 \rm(Proving equivalence---5\%)}
+It is not uncommon for perfectly functional circuits to be redesigned (eg. in order to save energy or materials or to fit more compactly on the board). An important step before manufacturing is to verify that the new design is equivalent to the old. Describe an algorithm that will take the logical formula for both circuits and return T if they are equivalent and F if they are not.
 
 %%%%%%%%%%%%
 \subsection*{Question 4 \rm(---8\%)}
 
 %%%%%%%%%%%%
 \subsection*{Question 5 \rm(---8\%)}
+
 
 \end{document}

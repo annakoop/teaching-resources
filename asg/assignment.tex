@@ -1,6 +1,6 @@
 \documentclass[12pt]{article}
 \usepackage{fullpage}
-\usepackage{epsf}
+\usepackage{graphicx}
 \input{commands}
 
 \begin{document}
@@ -35,21 +35,23 @@ University of Alberta, Augustana Faculty
 
 \hrule
 
-%\vspace*{1\baselineskip}
+\vspace*{1\baselineskip}
 
-%\noindent
-%{\bf Note}
-%Please submit your assignment to me by email.
-%Most of the questions require you to write small programs,
-%however for the written questions please format your answers
-%in a single {\em postscript\/} or {\em pdf\/} file.
-%Submit all required documents in a zip or tar archive.
+\noindent
+{\bf Note}
+Please submit your assignment to me by email.
+Some of the questions require you to write small programs,
+however for the written questions please format your answers
+in a single {\em pdf} file.
+Submit all required documents in a zip or tar archive.
 
 
 \vspace*{1\baselineskip}
 
 \hrule
 
+\section*{Part 1: Propositional Logic}
+Reference: Ch 7 of AIMA, Lectures 3-4.
 
 %%%%%%%%%%%%
 \subsection*{Question 1 \rm(Circuit Representation in Propositional Logic---2\%)}
@@ -65,7 +67,14 @@ voltage & truth value
 \end{tabular}
 \end{center}
 
-Write out the formula for the pictured circuit and convert it to conjunctive normal form. Show your steps.
+Write out the formula for the circuit below (Figure \ref{fig:adder}) and convert it to conjunctive normal form. Show your steps.
+\begin{figure}[bt]
+\caption{A (claimed) full-adder circuit}
+\label{fig:adder}
+\centering
+\includegraphics[width=.6\textwidth]{full_adder.png}
+\end{figure}
+
 
 %%%%%%%%%%%%
 \subsection*{Question 2 \rm(Applied Satisfiability---3\%)}
@@ -76,10 +85,31 @@ A digital circuit that only ever returns 0 is not going to be a terribly useful 
 It is not uncommon for perfectly functional circuits to be redesigned (eg. in order to save energy or materials or to fit more compactly on the board). An important step before manufacturing is to verify that the new design is equivalent to the old. Describe an algorithm that will take the logical formula for both circuits and return T if they are equivalent and F if they are not.
 
 %%%%%%%%%%%%
-\subsection*{Question 4 \rm(---8\%)}
+\section*{Part 2: Knowledge Engineering}
+Reference: Ch 8 of AIMA, Lectures 5-6.
+
+You will be designing an expert system for validating circuit designs. You may use whatever language, libraries or references you like, but you must be able to explain clearly how they work. I suggest using the Knowledge Base code supplied on the textbook website, which we discussed in lab. You will need to submit your working KB code as well as sufficient documentation for populating it.
 
 %%%%%%%%%%%%
-\subsection*{Question 5 \rm(---8\%)}
+\subsection*{Question 4 \rm(Ontology---2\%)}
+What concepts do you need in this expert system? Describe the predicate symbols, functions, and constants you will be using. 
+
+%%%%%%%%%%%%
+\subsection*{Question 5 \rm(Axioms---4\%)}
+What general rules must this expert system use to understand systems? These should be universal, separate from the KB augmented for a specific circuit design.
+
+Submit a populated knowledge base for this question (either the saved state or code for populating it).
+
+\subsection*{Question 6 \rm(Querying--8\%)}
+Use your knowledge base to determine whether the circuit below (Figure \ref{fig:sat}) is satisfiable. Note to do so you must populated the KB with the information about the specific circuit and formulate the satisfiability question as a logical query. Submit the updated knowledge base and the query itself, as well as the answer.
+
+\begin{figure}[bt]
+\caption{An unknown circuit}
+\label{fig:sat}
+\centering
+\includegraphics[width=.8\textwidth]{circuit2.jpg}
+\end{figure}
+
 
 
 \end{document}

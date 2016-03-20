@@ -4,6 +4,8 @@ from math import sqrt
 import random
 import timeit
 
+args = [(10, 2, 5), (3, 3, 3), (5, 3, 5), (4, 3, 9), (3, 3, 12), (3, 3, 20)]
+
 CNF = {'easy':[[1, 3, 2], [-1, 3, 2], [3, 1, -2]],
        'hard':[[1, 2, 3], [-1, -3, -2], [-1, -2, -3], [-3, -1, -2], [2, 1, -3], [3, 2, 1], 
                [-3, 2, -1], [3, 2, 1], [-1, 3, 2], [-2, 3, 1], [-2, -3, 1], [3, 2, 1]],
@@ -34,6 +36,29 @@ SOLVED_EIGHT = tuple(EIGHT['correct'])
 
 
 ###### SAT testing - Question 1
+def get_max_lit(cnf):
+    """
+    Return the largest literal in the statement
+    
+    >>> get_max_lit(CNF['easy'])
+    3
+    >>> get_max_lit(CNF['easy_long'])
+    10
+    """
+    with suppress(ValueError):
+        return max([max(map(abs, x)) for x in cnf])
+
+def get_min_len(cnf):
+    """
+    Return the length of the shortest clause
+    
+    >>> get_min_len([[]])
+    0
+    >>> get_min_len([[1, 2], [1]])
+    1
+    """
+    with suppress(ValueError):
+        return min(map(len, cnf))
 
 def confirm(cnf, asg):
     """
@@ -64,7 +89,11 @@ def confirm(cnf, asg):
 def test_simple_sats(func):
     for k in CNF:
         print("Testing {}".format(k))
-        ans = func(CNF[k])
+        try:
+            ans = func(CNF[k])
+        except Exception as e:
+            ans = None
+            print("RAISED EXCEPTION", e)
         if ans:
             print("Found ans",ans)
             if confirm(CNF[k], ans):

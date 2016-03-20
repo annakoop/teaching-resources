@@ -1,6 +1,5 @@
 \documentclass[12pt]{article}
 \usepackage{fullpage}
-\usepackage{epsf}
 
 \input{commands}
 
@@ -19,52 +18,639 @@
 \noindent
 Winter 2016\\
 Department of Science\\
-University of Alberta, Augustana Faculty
+University of Alberta, Augustana Faculty\\
+{\bf Instructor}: Anna Koop, HB 1-31, akoop@ualberta.ca
 
 \vspace*{1.75\baselineskip}
 \hrule
 
-\vspace*{0.75\baselineskip}
-
-\noindent
-{\bf Due}: through eClass, {\em Thursday, February 11}\\
-{\bf Worth}: 25\% of final grade
+\begin{tabbing}
+{\bf Instructor}:\ \ \=\kill
+\>{\bf Due}:\'{\em Friday, Feb 12 at 23:55:00 local time}
 \\
-{\bf Instructor}: Anna Koop, HB 1-31, akoop@ualberta.ca
-
-\vspace*{0.75\baselineskip}
+\>{\bf Worth}:\' 25\% of final grade \\
+\>(5 questions worth 5\% each, plus a 2\% bonus question.)
+\end{tabbing}
 
 \hrule
 
-\vspace*{1\baselineskip}
+\vspace*{1.25\baselineskip}
 
 \noindent
-{\bf Note}
+{\bf Note}:
 Please submit your assignment through eclass. Some questions require you to write small programs,
 however for the written questions please format your answers
 in a single {\em pdf\/} file.
 Submit all required documents in a zip or tar archive.
 
 
+\section{Constraint satisfaction \rm(10\%)}
+
+%%%%%%%%%%%%
 \vspace*{1\baselineskip}
+{\bf Definition}:
+Propositions in {\em conjunctive normal form\/} are of the form:
+\begin{eqnarray*}
+\mbox{\em CNF} & \leftarrow & 
+\mbox{\em clause}_1 
+\wedge
+\mbox{\em clause}_2 
+\wedge
+\cdots
+\wedge
+\mbox{\em clause}_m 
+\\
+\mbox{\em clause} & \leftarrow & 
+\mbox{\em literal}_1 
+\vee
+\mbox{\em literal}_2 
+\vee
+\cdots
+\vee
+\mbox{\em literal}_k 
+\\
+\mbox{\em literal} & \leftarrow & {\tt p}_i
+\\
+\mbox{\em literal} & \leftarrow & \neg {\tt p}_i
+%\\
+%&&
+\quad
+\mbox{ where } {\tt p}_i \mbox{ is a primitive proposition}
+\end{eqnarray*}
 
-\hrule
+\smallskip
+
+\noindent
+Propositions in {\em strict conjunctive normal form\/} 
+do not have any repeated primitive propositions in clauses,
+nor any opposing pair if literals in any clause
+(that is, both {\tt p} and $\neg$ {\tt p} never occur in the same clause).
+
+\noindent
+In this assignment you will represent:
+
+\begin{description}
+
+\item[Primitive propositions]
+by positive integers, 1, 2, 3, etc.
+
+For example, a primitive proposition ${\tt p}_1$ will be denoted by 1, 
+${\tt p}_2$ by 2, etc.
+
+\item[Literals]
+by nonzero integers, 1, -1, 2, -2, etc.
+
+For example, a negated literal $\neg {\tt p}_2$ will be denoted by -2, etc.
+
+\item[Clauses]
+by an array of nonzero integers (literals).
+
+For example, a clause $({\tt p}_1\vee\neg{\tt p}_2)$ will be denoted by [1, -2], etc.
+
+%Note: that an empty clause, i.e. a clause array of length zero, is assumed to
+%denote {\em false}.
+
+\item[CNF formulas]
+by an array of clauses.
+
+For example, a CNF formula $({\tt p}_1\vee\neg{\tt p}_2)\wedge({\tt p}_2\vee{\tt p}_3)$
+will be denoted by [ [1, -2], [2, 3] ].
+
+%Note: that an empty CNF formula, i.e. a formula array of length zero, 
+%is assumed to denote {\em true}.
+
+Note: that a clause that contains an opposing pair of literals,
+$i$ and -$i$, immediately evaluates to {\em true\/} and can be removed from
+the CNF formula.
+
+\item[Truth values] by 1 and -1, where 1 denotes the value {\em true\/} 
+and -1 denotes {\em false}. 
+
+\item[Truth value assignments] by an array of 1's, -1's, and 0's.
+The zero denotes that no truth value is assigned.
+
+For example, a truth value assignment to a set of primitive propositions
+would be an array [-1, 1, ... , -1].  The assignment to primitive proposition
+$p_i$ is located in array position $i$.
+
+
+
+\end{description}
+
+\bigskip
+
+\noindent
+Consider a complete truth value assignment to all primitive propositions.
+\begin{itemize}
+\item
+The assignment {\em satisfies\/} a positive literal $i$,
+if $i$ is assigned value 1 in the assignment.
+\item
+The assignment {\em satisfies\/} a negative literal -$i$,
+if $i$ is assigned value -1 in the assignment.
+\item
+The assignment {\em satisfies\/} a clause if it satisfies
+{\em at least one\/} literal in the clause.
+
+(Thus, a length zero clause is unsatisfiable.)
+\item
+The assignment {\em satisfies\/} a CNF formula if is satisfies
+{\em every\/} clause in the formula.
+
+(Thus, a length zero CNF formula is unfalsifiable.)
+\end{itemize}
+
+\newpage
+
+\subsection{Generating constraint satisfaction problems \rm(2\%)}
+Write a function {\tt randsat(n, k, m)}.
+%
+Given three positive integers $n$, $k$ and $m$, the function
+generates a random CNF formula
+\mbox{{\tt C} $=$ [$c_1$, $c_2$, $...$, $c_m$]}
+in strict conjunctive normal form,
+where each clause $c_j$ contains exactly $k$ random literals
+from \{1, -1, 2, -2, ..., $n$, -$n$\}.
+In particular, for each clause $c_i$ choose $k$ random primitives
+from \{1, 2, ..., $n$\},
+and for each primitive, $i$, randomly decide whether to negate it or not.
+Use a different seed for the random number generator in each run.
+
+\medskip
+
+\noindent
+{\bf Note} that
+one can think of the primitive propositions $i$ as {\em variables\/}
+that need truth values assigned and of the clauses $c_j$
+as {\em constraints\/} that need to be satisfied simultaneously.
+You will use this function to generate random constraint satisfaction problems.
+
+\medskip
+
+\noindent
+{\bf Interestingly}
+for $k=3$ it is known that if $m<3n$ then there are usually not enough
+constraints to make the problem unsatisfiable
+(that is, most of the random {\tt C}'s will be satisfiable);
+whereas if $m>6n$ then there are usually too many constraints
+to make the problem satisfiable
+(that is, most of the random {\tt C}'s will be unsatisfiable).
+A critical ``phase transition'' occurs near $m=4.26n$.
+At this point half of the random problems are satisfiable.
+Curiously, random problems generated at the phase transition
+appear to be the hardest to solve (on average)
+for any solution technique.
 
 
 %%%%%%%%%%%%
-\subsection*{Question 1 \rm(Generating--2\%)}
+\subsection{Simple complete search \rm(3\%)}
+Write a function {\tt satcom(C)}.
+
+The function takes a CNF formula {\tt C} 
+%(in strict conjunctive normal form) 
+and returns an array of truth value assignments 
+that satisfies {\tt C}.  The array should have size $(n+1)$ where $p_n$
+is the largest-numbered primitive proposition occurring in {\tt C}.
+(Notice that most languages index arrays beginning with 0 and we want to index
+variables by their name.)
+Any array positions corresponding to primitives \emph{not occurring} in {\tt C}
+should be initialized to 0.
+If there are no assignments that satisfy {\tt C} then {\tt satcom} should return {\tt None} (or equivalent).
+
+\medskip
+
+So, for example:
+
+{\tt satcom( [[-1, 2], [-2, 4]] ) }
+
+should return
+
+\medskip
+
+\hspace*{0.37cm}
+{\tt [0, 1, 1, 0, 1]} \hspace{.93cm} or
+{\tt [0, -1, 1, 0, 1]}\par or
+{\tt [0, -1, -1, 0, 1]} \hspace*{.5cm} or
+{\tt [0, -1, -1, 0, -1]}\par or
+{\tt [0, 0, 1, 0, 1]} ($p_1$ remains unassigned)\par or
+{\tt [0, -1, 0, 0, 1]} ($p_2$ remains unassigned)\par or
+{\tt [0, -1, -1, 0, 0]} ($p_4$ remains unassigned).
+
+\medskip
+
+That is, if there are many satisfying assignments, your function
+should just return one.
+
+\bigskip
+
+Similarly:
+
+{\tt satcom( [[1], [-1]] )}
+should return {\tt NULL}.
+
+\bigskip
+
+\noindent
+You must implement a simple backtrack search procedure as outlined below.
+
+\newpage
+
+\subsection*{Pseudo code for a simple backtrack search}
+
+\vspace*{2ex}
+
+%Davis, Logemann, Loveland (1962) A machine program for theorem-proving.
+%Communications of the ACM, 7, pp. 201-215.
+
+\begin{tabbing}
+{\bf fu}\={\bf nction} {\tt satcom} ({\tt C})
+\\
+\\
+\> {\tt assign} $=$ [0, 0, ..., 0]
+\\
+\\
+\> {\bf if} {\tt C} has length zero, {\bf return} {\tt assign}
+\\
+\\
+\> {\bf else if} 
+{\tt C} contains a zero length clause, {\bf return} {\tt NULL}
+\\
+\\
+\> {\bf else if}
+\={\tt C} contains a proposition {\tt p} that occurs only in ``{\tt and}'' parts or %\\
+\kill
+%\>\> as the only proposition in some $impl$ (and in the ``{\tt and}'' part)
+%\\
+%\>\> $v :=$ {\tt false}
+%%\\
+%\>\> $r :=$ {\tt satcom}(assign {\tt p} false in {\tt C})
+%\\
+%\\
+%\> {\bf else if}
+%\>{\tt C} contains a proposition {\tt p} that occurs only in ``{\tt or}'' 
+%parts or
+%\\
+%\>\> as the only proposition in some $impl$ (and in the ``{\tt or}'' part)
+%\\
+%\>\> $v :=$ {\tt true}
+%\\
+%\>\> $r :=$ {\tt satcom}(assign {\tt p} true in {\tt C})
+%\\
+\> {\bf else}
+\\
+\>\>
+pick any primitive proposition $i$ that occurs in {\tt C}
+\\
+\>\> {\tt assign}$[i] :=  -1$
+\\
+\>\> $r :=$ {\tt satcom}(assign $i$ false in {\tt C})
+\\
+\>\> {\bf if} \=$r=$ {\tt NULL}
+\\
+\>\>\> {\tt assign}$[i] := 1$
+\\
+\>\>\> $r :=$ {\tt satcom}(assign $i$ true in {\tt C})
+\\
+\>{\bf endif}
+\\
+\\
+\> {\bf if} $r=$ {\tt NULL}
+\\
+\>\> {\bf return} {\tt NULL}
+\\
+\> {\bf else}
+\\
+\>\> {\bf return} {\tt assign}
+\end{tabbing}
+
+\vspace*{1ex}
+
+\begin{tabbing}
+{\bf function}\= ``assign $i$ false in {\tt C}''
+\\
+\> Temporarily remove all clauses from {\tt C} that contain $-i$
+\\
+\> Temporarily remove $i$ from remaining clauses
+\end{tabbing}
+
+\vspace*{1ex}
+
+\begin{tabbing}
+{\bf function}\= ``assign $i$ true in {\tt C}''
+\\
+\> Temporarily remove all clauses from {\tt C} that contain $i$
+\\
+\> Temporarily remove $-i$ from remaining clauses
+\end{tabbing}
+
+\bigskip
+
+\noindent
+{\em Note:}\/ all clauses and literals removed from {\tt C}
+have to be restored to their previous state after each
+backtrack.
+
+\vspace*{1.75\baselineskip}
+
+%\hrule
+
+\newpage
+
+%%%%%%%%%%%%
+\subsection{Faster complete search \rm(3\%)}
+Write a function {\tt satcomfast(C)}.
+%
+As before,
+the function takes a CNF formula {\tt C} 
+%(in strict conjuctive normal form) 
+and returns a truth value assignment
+that satisfies {\tt C}.
+If there are no such assignments then {\tt satcomfast} 
+should return {\tt NULL}.
+
+You must implement the improved backtrack search procedure outlined below.
+
+\subsection*{Pseudo code for an improved backtrack search}
+
+\vspace*{1ex}
+
+\begin{tabbing}
+{\bf function} {\tt satcomfast} ({\tt C})
+\end{tabbing}
+
+\noindent
+Follow the same outline as the simple backtrack search,
+except add the following two conditions
+between the first ``{\bf else if}'' and ``{\bf else}'':
+
+
+\begin{tabbing}
+{\bf fu}\={\bf nction} {\tt satcomfast} ({\tt C})
+\kill
+\> {\bf else if}
+\={\tt C} contains a proposition $i$ that occurs only negatively \\
+\>\> or occurs negatively in some clause of length one 
+\\
+\>\> {\tt assign}$[i] := -1$
+\\
+\>\> $r :=$ {\tt satcomfast}(assign $i$ false in {\tt C})
+\\
+\\
+\> {\bf else if}
+\>{\tt C} contains a proposition $i$ that occurs only positively \\
+\>\> or occurs positively in some clause of length one 
+\\
+\>\> {\tt assign}$[i] := 1$
+\\
+\>\> $r :=$ {\tt satcomfast}(assign $i$ true in {\tt C})
+\end{tabbing}
+ 
+ \subsection{Discussion \rm(2\%)}
+ Describe the performance of your two search implementations in terms of {\tt n, k, m}. Be sure to consider both average case and worst-case results (you may wish to construct a pathological case to force worst-case results).
+ 
+\newpage
+
+\section{State Search \rm(15\%)}
+
+
+\subsubsection*{The eight-puzzle}
+
+\noindent
+The eight puzzle consists of a $3\times 3$ board with numbered 
+squares $1,...,8$ and a special {\em blank\/} square.
+The blank can be swapped with any square that is immediately above, below, 
+to the left, or to the right of it.
+The goal state is given by the configuration
+%
+\begin{center}
+$\begin{array}[t]{|c|c|c|}\hline
+1 & 2 & 3 \\\hline
+8 &   & 4 \\\hline
+7 & 6 & 5 \\\hline
+\end{array}$
+\end{center}
+
+\noindent
+An instance of the eight-puzzle problem is specified by giving an
+initial state. 
+The objective is to find a shortest sequence of
+moves that takes the initial state to the goal state.
+For example
+
+\[
+\begin{array}{|c|c|c|}\hline
+1 & 3 & 4 \\\hline
+8 &   & 5 \\\hline
+7 & 2 & 6 \\\hline
+\end{array}
+\begin{array}{c}d\\\rightarrow\end{array}
+\begin{array}{|c|c|c|}\hline
+1 & 3 & 4 \\\hline
+8 & 2 & 5 \\\hline
+7 &   & 6 \\\hline
+\end{array}
+\begin{array}{c}r\\\rightarrow\end{array}
+\begin{array}{|c|c|c|}\hline
+1 & 3 & 4 \\\hline
+8 & 2 & 5 \\\hline
+7 & 6 &   \\\hline
+\end{array}
+\begin{array}{c}u\\\rightarrow\end{array}
+\begin{array}{|c|c|c|}\hline
+1 & 3 & 4 \\\hline
+8 & 2 &   \\\hline
+7 & 6 & 5 \\\hline
+\end{array}
+\begin{array}{c}u\\\rightarrow\end{array}
+\begin{array}{|c|c|c|}\hline
+1 & 3 &   \\\hline
+8 & 2 & 4 \\\hline
+7 & 6 & 5 \\\hline
+\end{array}
+\begin{array}{c}l\\\rightarrow\end{array}
+\begin{array}{|c|c|c|}\hline
+1 &   & 3 \\\hline
+8 & 2 & 4 \\\hline
+7 & 6 & 5 \\\hline
+\end{array}
+\begin{array}{c}d\\\rightarrow\end{array}
+\begin{array}{|c|c|c|}\hline
+1 & 2 & 3 \\\hline
+8 &   & 4 \\\hline
+7 & 6 & 5 \\\hline
+\end{array}
+\]
+
+\noindent
+In this assignment you will implement 
+a random initial state generator, {\tt randep},
+and three procedures for solving eight-puzzle problems:
+an iterative deepening search, {\tt ids};
+an iterative deepening $A^*$ search, {\tt idas};
+and a faster version of $\mbox{\it IDA}^*$ search, {\tt idasfast}.
+
+\subsubsection*{Representation}
+To implement these search procedures you will need to represent
+states and actions in simple form.
+For this assignment you will represent states by an array of integers
+where the $i$th location of the array contains the number of the
+square in the $i$th location of the board. 
+The board locations will be indexed
+%
+$\begin{array}[t]{|c|c|c|}\hline
+{\ell}_0 & {\ell}_3 & {\ell}_6 \\\hline
+{\ell}_1 & {\ell}_4 & {\ell}_7 \\\hline
+{\ell}_2 & {\ell}_5 & {\ell}_8 \\\hline
+\end{array}$
+Thus, the goal state,
+$\begin{array}[t]{|c|c|c|}\hline
+1 & 2 & 3 \\\hline
+8 &   & 4 \\\hline
+7 & 6 & 5 \\\hline
+\end{array}$,
+will be represented by an array {\tt \{1, 8, 7, 2, 0, 6, 3, 4, 5 \}},
+where
+the blank square is represented by a {\tt 0}.
+
+\begin{itemize}
+\item
+The action {\em move-up\/} (``{\tt u}'') is implemented by swapping {\tt 0} 
+with
+the number one position to the left, as long as
+{\tt 0} is not in the $\ell_0$, $\ell_3$ or $\ell_6$ position.
+\item
+The action {\em move-down\/} (``{\tt d}'') is implemented by swapping {\tt 0} 
+with
+the number one position to the right of it in the array, as long as
+{\tt 0} is not in the $\ell_2$, $\ell_5$ or $\ell_8$ position.
+\item
+The action {\em move-right\/} (``{\tt r}'') is implemented by swapping {\tt 0} 
+with
+the number three positions to the right (if possible).
+\item
+The action {\em move-left\/} (``{\tt l}'') is implemented by swapping {\tt 0} 
+with
+the number three positions to the left of it in the array (if possible).
+\end{itemize}
+
+\comment{
+%
+$\begin{array}[t]{|c|c|c|}\hline
+{\ell}_0 & {\ell}_1 & {\ell}_2 \\\hline
+{\ell}_3 & {\ell}_4 & {\ell}_5 \\\hline
+{\ell}_6 & {\ell}_7 & {\ell}_8 \\\hline
+\end{array}$
+Thus, the goal state,
+$\begin{array}[t]{|c|c|c|}\hline
+1 & 2 & 3 \\\hline
+8 &   & 4 \\\hline
+7 & 6 & 5 \\\hline
+\end{array}$,
+will be represented by an array {\tt \{1, 2, 3, 8, 0, 4, 7, 6, 5 \}},
+where
+the blank square is represented by a {\tt 0}.
+
+\begin{itemize}
+\item
+The action {\em move-up\/} (``{\tt u}'') is implemented by swapping {\tt 0} with
+the number three positions to the left of it in the array (if possible).
+\item
+The action {\em move-down\/} (``{\tt d}'') is implemented by swapping {\tt 0} with
+the number three positions to the right (if possible).
+\item
+The action {\em move-right\/} (``{\tt r}'') is implemented by swapping {\tt 0} with
+the number one position to the right of it in the array, as long as
+{\tt 0} is not in the $\ell_2$, $\ell_5$ or $\ell_8$ position.
+\item
+The action {\em move-left\/} (``{\tt l}'') is implemented by swapping {\tt 0} with
+the number one position to the left, as long as
+{\tt 0} is not in the $\ell_0$, $\ell_3$ or $\ell_6$ position.
+\end{itemize}
+}
+
+%%%%%%%%%%%%
+\subsection{Generating eight-puzzle problems \rm(1\%)}
+
+Write a function {\tt randep(d)}
+which, for an argument \verb+d+$ \ge 0$, generates a random
+initial state by starting with the goal state and taking $d$ random
+(legal) moves from the goal.
+The function should return an array representing the state it reaches.
+
+%%%%%%%%%%%%
+\subsection{Iterative deepening search \rm(5\%)}
+
+Write a function {\tt ids(s, g)}.
+%
+The function takes two arguments---\verb+s+, an initial state, and
+\verb+g+, a goal state---and returns a shortest list of moves
+{\tt [$m_1$, $m_2$, \ldots $m_k$ ]}
+that takes the initial state \verb+s+ to the goal \verb+g+.
+Each move $m_i$ must be one of characters {\tt l}, {\tt r}, {\tt u},
+or {\tt d}.
+Specifically you must implement an {\em iterative deepening search\/}
+to do this.
+(You can assume a solution exists.)
+
+\medskip
+
+\noindent
+Thus,
+%
+\begin{verbatim}
+	s = [1,8,7,3,0,2,4,5,6]
+	g = [1,8,7,2,0,6,3,4,5]
+	r = ids.ids(s, g);
+\end{verbatim}
+\comment{
+\begin{verbatim}
+	s = [1,3,4,8,0,5,7,2,6]
+	g = [1,2,3,8,0,4,7,6,5]
+	r = Ids.ids(s, g)
+\end{verbatim}
+}
+%
+should return
+%
+\begin{verbatim}
+	r = [ 'd', 'r', 'u', 'u', 'l', 'd' ]
+\end{verbatim}
+
+ 
+%%%%%%%%%%%%
+\subsection{Iterative deepening $A^*$ search \rm(6\%)}
+
+Write a  function {\tt idas(s, g)}
+%
+The precondition and postcondition for this procedure
+are the same as for \verb+ids+.
+However, for this part you must implement the problem solver by using an
+{\em iterative deepening $A^*$ search}.
+Recall that
+{\em ID}$A^*$ requires a heuristic function $\hat{h}(s)$ for estimating
+the number of steps remaining from a state $s$ to a goal $g$.
+Use the following heuristic
+\[
+\hat{h}(s) = \sum_{\mbox{pieces}} \mbox{ distance from piece's location in $s$
+to its target location in $g$}
+\]
+where the distance is calculated by determining the shortest (u,d,l,r) path 
+from a piece's location in $s$ to its goal location in $g$.
+
+%\newpage
 
 
 %%%%%%%%%%%%
-\subsection*{Question 2 \rm(---4\%)}
+\subsection{Faster {\em ID}$A^*$ search \rm(3\%)}
 
-%%%%%%%%%%%%
-\subsection*{Question 3 \rm(---3\%)}
+Write a function {\tt idasfast(s, g)}.
+%
+Implement an efficient method for pruning additional states 
+that results in a significantly faster search than {\tt idas}.
+Come up with an idea for doing this on your own, 
+and clearly document the method you use.
 
-%%%%%%%%%%%%
-\subsection*{Question 4 \rm(---8\%)}
+\newpage
 
-%%%%%%%%%%%%
-\subsection*{Question 5 \rm(---8\%)}
 
 \end{document}

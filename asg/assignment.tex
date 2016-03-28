@@ -11,7 +11,7 @@
 \vspace*{1\baselineskip}
 
 \noindent
-{\large\bf Assignment 2: Search and Planning}
+{\large\bf Assignment 5: Classification}
 
 \vspace*{1\baselineskip}
 
@@ -26,10 +26,10 @@ University of Alberta, Augustana Faculty\\
 
 \begin{tabbing}
 {\bf Instructor}:\ \ \=\kill
-\>{\bf Due}:\'{\em Friday, Feb 12 at 23:55:00 local time}
+\>{\bf Due}:\'{\em Friday, Apr 8 at 23:55:00 local time}
 \\
 \>{\bf Worth}:\' 25\% of final grade \\
-\>(5 questions worth 5\% each, plus a 2\% bonus question.)
+\>(5 questions worth 5\% each)
 \end{tabbing}
 
 \hrule
@@ -38,619 +38,371 @@ University of Alberta, Augustana Faculty\\
 
 \noindent
 {\bf Note}:
-Please submit your assignment through eclass. Some questions require you to write small programs,
-however for the written questions please format your answers
-in a single {\em pdf\/} file.
-Submit all required documents in a zip or tar archive.
+If using python, submit a single file called models.py defining the specified functions.
 
+If using another language, submit a zip file with instruction to run.
 
-\section{Constraint satisfaction \rm(10\%)}
+\subsubsection*{Handwritten digit recognition}
 
-%%%%%%%%%%%%
-\vspace*{1\baselineskip}
-{\bf Definition}:
-Propositions in {\em conjunctive normal form\/} are of the form:
-\begin{eqnarray*}
-\mbox{\em CNF} & \leftarrow & 
-\mbox{\em clause}_1 
-\wedge
-\mbox{\em clause}_2 
-\wedge
-\cdots
-\wedge
-\mbox{\em clause}_m 
-\\
-\mbox{\em clause} & \leftarrow & 
-\mbox{\em literal}_1 
-\vee
-\mbox{\em literal}_2 
-\vee
-\cdots
-\vee
-\mbox{\em literal}_k 
-\\
-\mbox{\em literal} & \leftarrow & {\tt p}_i
-\\
-\mbox{\em literal} & \leftarrow & \neg {\tt p}_i
-%\\
-%&&
+\noindent
+In this assignment you will implement simple handwritten digit
+recognizers using simple probability models.
+We will be using the MNIST data set which you have already seen in Weka or directly from {\texttt http://yann.lecun.com/exdb/mnist/}.
+
+The first step is to go to the course webpage 
+and get the files model.mat and show.m.
+In Matlab, type ``{\tt load model.mat}.''
+This will load the arrays
+{\tt digits} ($8\times8\times10$),
+{\tt noise} ($1\times7$),
+{\tt htrans} ($1\times3$),
+and
+{\tt vtrans} ($1\times3$).
+The array {\tt digits} contains image templates for the digits
+1,...,9,0.
+To see them, type {\tt show(digits(:,:,}$d${\tt))} for $d=1,...,10$.
+There is also a collection of real handwritten
+digits in the file data.mat
+which contains 1100 examples each digit in an $8\times8\times1100\times10$
+array called {\tt data}.
+
+\bigskip
+
+\noindent
+{\em Background}:
+In this assignment digit images will be represented by $8\times8$
+arrays of greyscale numbers, where
+1 = black, 2 = dark grey, 3 = light grey, and 4 = white.
+For example, the following matrix represents the corresponding image.
+
+\bigskip
+
+\hspace*{1.5cm}
+\raisebox{2.5cm}{$\left[\begin{array}{cccccccc}
+     1 &     1 &     1 &     2 &     3 &     4 &     4 &     4 \\
+     1 &     1 &     2 &     3 &     4 &     2 &     2 &     2 \\
+     1 &     1 &     3 &     4 &     2 &     1 &     1 &     1 \\
+     1 &     2 &     4 &     4 &     4 &     4 &     2 &     1 \\
+     1 &     1 &     2 &     2 &     2 &     2 &     4 &     2 \\
+     2 &     1 &     1 &     1 &     2 &     3 &     4 &     2 \\
+     4 &     3 &     2 &     2 &     3 &     4 &     2 &     1 \\
+     2 &     4 &     4 &     4 &     4 &     2 &     1 &     1
+\end{array}\right]$}
 \quad
-\mbox{ where } {\tt p}_i \mbox{ is a primitive proposition}
+%\epsfxsize=2in\epsfbox{five.eps}
+
+The goal is to implement three probability models that can be used
+to generate and recognize images of handwritten digits.
+The assignment is split up into three main parts: in each part
+you will implement a generator and recognizer for a different
+probability model (where each model extends the previous).
+
+%\vspace*{1\baselineskip}
+\newpage
+
+\hrule
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Probability Model 1: Generation}
+
+\input{images/model1}
+
+\bigskip
+
+\noindent
+Pick a digit $n$ uniformly at random from among 1,...,9,0
+and retrieve its corresponding image template $D$ (an $8\times8$ array).
+Given the digit template, each image pixel $o_{ij}$ is generated independently 
+by first picking a random noise value $n_{ij}\in\{-3,-2,-1,0,1,2,3\}$
+(according to the distribution defined in {\tt noise}),
+adding the noise to the corresponding digit template pixel $d_{ij}$
+to obtain the raw pixel value, $r_{ij}=d_{ij}+n_{ij}$,
+and then thresholding the raw value to obtain the observed image pixel:
+\[
+o_{ij} \;\;=\;\;\left\{\begin{array}{cll}
+r_{ij} & \mbox{ if } & 1\leq r_{ij}\leq4\\
+1 & \mbox{ if } & r_{ij} < 1\\
+4 & \mbox{ if } & r_{ij} > 4
+\end{array}\right.
+\]
+The {\tt noise} vector gives the probability of obtaining each noise value:
+{\tt noise(1)}$=\PP(n_{ij}\!=\!-3)$,
+{\tt noise(2)}$=\PP(n_{ij}\!=\!-2)$,
+...,
+{\tt noise(7)}$=\PP(n_{ij}\!=\!3)$.
+
+
+
+
+%%%%%%%%%%%%
+\subsection*{Part 1 \rm(Generating from Model 1---1\%)}
+
+Write a Matlab function ``{\tt gen1}'' that takes two arguments,
+{\tt digits} and {\tt noise}, and returns a random image of a 
+digit generated by the model outlined above.
+
+
+\vspace*{1\baselineskip}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\newpage
+\hrule
+
+\subsubsection*{Probability Model 1: Recognition}
+
+Given an observed image $O$, we wish to compute the most likely
+digit given the image.  This amounts to computing the most likely
+digit image template $D$ given $O$
+(since digits and their image templates are in a one-to-one correspondence).
+Thus, we wish to find
+
+\begin{eqnarray*}
+D^* & = & \arg\max_D \; \PP(D|O)
+\\
+& = & \arg\max_D \; \PP(DO)
+\\
+& = & \arg\max_D \; \sum_N \PP(DNO)
+\\
+& = & \arg\max_D \; \sum_N \PP(D) \PP(N) \PP(O|DN)
+\\
+& = & \arg\max_D \; \PP(D) \sum_{n_{11}=-3}^3\cdots\sum_{n_{88}=-3}^3 \left[\prod_{i=1}^8\prod_{j=1}^8\PP(n_{ij})\right]\left[\prod_{i=1}^8\prod_{j=1}^8\PP(o_{ij}|d_{ij},n_{ij})\right]
+\\
+& = & \arg\max_D \; \PP(D) \prod_{i=1}^8\prod_{j=1}^8 \sum_{n_{ij}=-3}^3 \PP(n_{ij})\PP(o_{ij}|d_{ij},n_{ij})
 \end{eqnarray*}
-
-\smallskip
-
-\noindent
-Propositions in {\em strict conjunctive normal form\/} 
-do not have any repeated primitive propositions in clauses,
-nor any opposing pair if literals in any clause
-(that is, both {\tt p} and $\neg$ {\tt p} never occur in the same clause).
-
-\noindent
-In this assignment you will represent:
-
-\begin{description}
-
-\item[Primitive propositions]
-by positive integers, 1, 2, 3, etc.
-
-For example, a primitive proposition ${\tt p}_1$ will be denoted by 1, 
-${\tt p}_2$ by 2, etc.
-
-\item[Literals]
-by nonzero integers, 1, -1, 2, -2, etc.
-
-For example, a negated literal $\neg {\tt p}_2$ will be denoted by -2, etc.
-
-\item[Clauses]
-by an array of nonzero integers (literals).
-
-For example, a clause $({\tt p}_1\vee\neg{\tt p}_2)$ will be denoted by [1, -2], etc.
-
-%Note: that an empty clause, i.e. a clause array of length zero, is assumed to
-%denote {\em false}.
-
-\item[CNF formulas]
-by an array of clauses.
-
-For example, a CNF formula $({\tt p}_1\vee\neg{\tt p}_2)\wedge({\tt p}_2\vee{\tt p}_3)$
-will be denoted by [ [1, -2], [2, 3] ].
-
-%Note: that an empty CNF formula, i.e. a formula array of length zero, 
-%is assumed to denote {\em true}.
-
-Note: that a clause that contains an opposing pair of literals,
-$i$ and -$i$, immediately evaluates to {\em true\/} and can be removed from
-the CNF formula.
-
-\item[Truth values] by 1 and -1, where 1 denotes the value {\em true\/} 
-and -1 denotes {\em false}. 
-
-\item[Truth value assignments] by an array of 1's, -1's, and 0's.
-The zero denotes that no truth value is assigned.
-
-For example, a truth value assignment to a set of primitive propositions
-would be an array [-1, 1, ... , -1].  The assignment to primitive proposition
-$p_i$ is located in array position $i$.
-
-
-
-\end{description}
-
-\bigskip
-
-\noindent
-Consider a complete truth value assignment to all primitive propositions.
-\begin{itemize}
-\item
-The assignment {\em satisfies\/} a positive literal $i$,
-if $i$ is assigned value 1 in the assignment.
-\item
-The assignment {\em satisfies\/} a negative literal -$i$,
-if $i$ is assigned value -1 in the assignment.
-\item
-The assignment {\em satisfies\/} a clause if it satisfies
-{\em at least one\/} literal in the clause.
-
-(Thus, a length zero clause is unsatisfiable.)
-\item
-The assignment {\em satisfies\/} a CNF formula if is satisfies
-{\em every\/} clause in the formula.
-
-(Thus, a length zero CNF formula is unfalsifiable.)
-\end{itemize}
-
-\newpage
-
-\subsection{Generating constraint satisfaction problems \rm(2\%)}
-Write a function {\tt randsat(n, k, m)}.
-%
-Given three positive integers $n$, $k$ and $m$, the function
-generates a random CNF formula
-\mbox{{\tt C} $=$ [$c_1$, $c_2$, $...$, $c_m$]}
-in strict conjunctive normal form,
-where each clause $c_j$ contains exactly $k$ random literals
-from \{1, -1, 2, -2, ..., $n$, -$n$\}.
-In particular, for each clause $c_i$ choose $k$ random primitives
-from \{1, 2, ..., $n$\},
-and for each primitive, $i$, randomly decide whether to negate it or not.
-Use a different seed for the random number generator in each run.
-
-\medskip
-
-\noindent
-{\bf Note} that
-one can think of the primitive propositions $i$ as {\em variables\/}
-that need truth values assigned and of the clauses $c_j$
-as {\em constraints\/} that need to be satisfied simultaneously.
-You will use this function to generate random constraint satisfaction problems.
-
-\medskip
-
-\noindent
-{\bf Interestingly}
-for $k=3$ it is known that if $m<3n$ then there are usually not enough
-constraints to make the problem unsatisfiable
-(that is, most of the random {\tt C}'s will be satisfiable);
-whereas if $m>6n$ then there are usually too many constraints
-to make the problem satisfiable
-(that is, most of the random {\tt C}'s will be unsatisfiable).
-A critical ``phase transition'' occurs near $m=4.26n$.
-At this point half of the random problems are satisfiable.
-Curiously, random problems generated at the phase transition
-appear to be the hardest to solve (on average)
-for any solution technique.
+where
+\[
+\PP(o_{ij}|d_{ij},n_{ij}) \;\;=\;\;\left\{
+\begin{array}{ll}
+1 & \begin{array}[t]{l}\mbox{ if } d_{ij}+n_{ij}=o_{ij}\\
+                    \mbox{ or } o_{ij} = 1 \mbox{ and } d_{ij}+n_{ij}<1\\
+                    \mbox{ or } o_{ij} = 4 \mbox{ and } d_{ij}+n_{ij}>4\\
+\rule{0em}{1ex}
+    \end{array}
+\\
+0 & \mbox{ otherwise }
+\end{array}
+\right.
+\]
+and $P(D)$ is uniform.
+For each digit image template, $D^{(1)},...,D^{(9)},D^{(0)}$,
+we can then compute the conditional probability of $D^{(d)}$ given
+$O$ by $\PP(D^{(d)}|O)=\PP(D^{(d)}O)/\sum_{d=1,...9,0}\PP(D^{(d)}O)$.
 
 
 %%%%%%%%%%%%
-\subsection{Simple complete search \rm(3\%)}
-Write a function {\tt satcom(C)}.
+\subsection*{Part 2 \rm(Recognition with Model 1---2\%)}
 
-The function takes a CNF formula {\tt C} 
-%(in strict conjunctive normal form) 
-and returns an array of truth value assignments 
-that satisfies {\tt C}.  The array should have size $(n+1)$ where $p_n$
-is the largest-numbered primitive proposition occurring in {\tt C}.
-(Notice that most languages index arrays beginning with 0 and we want to index
-variables by their name.)
-Any array positions corresponding to primitives \emph{not occurring} in {\tt C}
-should be initialized to 0.
-If there are no assignments that satisfy {\tt C} then {\tt satcom} should return {\tt None} (or equivalent).
+Write a Matlab function ``{\tt rec1}'' that takes three arguments,
+{\tt obs}, {\tt digits}, and {\tt noise}, where {\tt obs} is
+an $8\times8$ image of an observed digit,
+and returns {\tt class} and {\tt probs},
+where {\tt class} is the digit 1,...,9,0 that is most likely given
+{\tt obs}, and {\tt probs} is a $1\times10$ array of the conditional
+probabilities of each digit given {\tt obs}.
+The classification and conditional probabilities are to be calculated
+using the procedures outlined above.
+(Note that the conditional probabilities may be near zero or one.)
 
-\medskip
 
-So, for example:
+\vspace*{1\baselineskip}
 
-{\tt satcom( [[-1, 2], [-2, 4]] ) }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\newpage
+\hrule
 
-should return
+\subsubsection*{Probability Model 2: Generation}
 
-\medskip
-
-\hspace*{0.37cm}
-{\tt [0, 1, 1, 0, 1]} \hspace{.93cm} or
-{\tt [0, -1, 1, 0, 1]}\par or
-{\tt [0, -1, -1, 0, 1]} \hspace*{.5cm} or
-{\tt [0, -1, -1, 0, -1]}\par or
-{\tt [0, 0, 1, 0, 1]} ($p_1$ remains unassigned)\par or
-{\tt [0, -1, 0, 0, 1]} ($p_2$ remains unassigned)\par or
-{\tt [0, -1, -1, 0, 0]} ($p_4$ remains unassigned).
-
-\medskip
-
-That is, if there are many satisfying assignments, your function
-should just return one.
+The second probability model extends the first by adding a possible 
+transformation to the digit templates before generating the final image.
+We will consider a small set of simple 
+horizontal and vertical shear transformations.
+In particular, horizontal shear transformations
+will slide the top part of the image template to the left
+and the bottom part to the right.
+For example, a horizontal shear value of $h=2$ 
+will shift the template as follows:
 
 \bigskip
 
-Similarly:
+\input{images/shear5}
+%\quad
+%\raisebox{-1.1ex}{\epsfxsize=2in\epsfbox{shearfive.eps}}
 
-{\tt satcom( [[1], [-1]] )}
-should return {\tt NULL}.
+\noindent
+Similarly, a vertical shear transformation will
+slide the left part of the image
+in an opposite direction to the right part.
+For example, a vertical shear value of $v=-1$
+will shift the template as follows:
 
 \bigskip
 
-\noindent
-You must implement a simple backtrack search procedure as outlined below.
-
-\newpage
-
-\subsection*{Pseudo code for a simple backtrack search}
-
-\vspace*{2ex}
-
-%Davis, Logemann, Loveland (1962) A machine program for theorem-proving.
-%Communications of the ACM, 7, pp. 201-215.
-
-\begin{tabbing}
-{\bf fu}\={\bf nction} {\tt satcom} ({\tt C})
-\\
-\\
-\> {\tt assign} $=$ [0, 0, ..., 0]
-\\
-\\
-\> {\bf if} {\tt C} has length zero, {\bf return} {\tt assign}
-\\
-\\
-\> {\bf else if} 
-{\tt C} contains a zero length clause, {\bf return} {\tt NULL}
-\\
-\\
-\> {\bf else if}
-\={\tt C} contains a proposition {\tt p} that occurs only in ``{\tt and}'' parts or %\\
-\kill
-%\>\> as the only proposition in some $impl$ (and in the ``{\tt and}'' part)
-%\\
-%\>\> $v :=$ {\tt false}
-%%\\
-%\>\> $r :=$ {\tt satcom}(assign {\tt p} false in {\tt C})
-%\\
-%\\
-%\> {\bf else if}
-%\>{\tt C} contains a proposition {\tt p} that occurs only in ``{\tt or}'' 
-%parts or
-%\\
-%\>\> as the only proposition in some $impl$ (and in the ``{\tt or}'' part)
-%\\
-%\>\> $v :=$ {\tt true}
-%\\
-%\>\> $r :=$ {\tt satcom}(assign {\tt p} true in {\tt C})
-%\\
-\> {\bf else}
-\\
-\>\>
-pick any primitive proposition $i$ that occurs in {\tt C}
-\\
-\>\> {\tt assign}$[i] :=  -1$
-\\
-\>\> $r :=$ {\tt satcom}(assign $i$ false in {\tt C})
-\\
-\>\> {\bf if} \=$r=$ {\tt NULL}
-\\
-\>\>\> {\tt assign}$[i] := 1$
-\\
-\>\>\> $r :=$ {\tt satcom}(assign $i$ true in {\tt C})
-\\
-\>{\bf endif}
-\\
-\\
-\> {\bf if} $r=$ {\tt NULL}
-\\
-\>\> {\bf return} {\tt NULL}
-\\
-\> {\bf else}
-\\
-\>\> {\bf return} {\tt assign}
-\end{tabbing}
-
-\vspace*{1ex}
-
-\begin{tabbing}
-{\bf function}\= ``assign $i$ false in {\tt C}''
-\\
-\> Temporarily remove all clauses from {\tt C} that contain $-i$
-\\
-\> Temporarily remove $i$ from remaining clauses
-\end{tabbing}
-
-\vspace*{1ex}
-
-\begin{tabbing}
-{\bf function}\= ``assign $i$ true in {\tt C}''
-\\
-\> Temporarily remove all clauses from {\tt C} that contain $i$
-\\
-\> Temporarily remove $-i$ from remaining clauses
-\end{tabbing}
+\hspace*{2.2em}
+\input{images/vshear}
+\hspace*{1.49cm}
+%\raisebox{2.3ex}{\epsfxsize=2in\epsfbox{shearvfive.eps}}
 
 \bigskip
 
-\noindent
-{\em Note:}\/ all clauses and literals removed from {\tt C}
-have to be restored to their previous state after each
-backtrack.
+Generation from this model is similar to before,
+except that we introduce an intermediate transformation
+step which takes into account both the horizontal and
+vertical shears.
 
-\vspace*{1.75\baselineskip}
-
-%\hrule
-
-\newpage
-
-%%%%%%%%%%%%
-\subsection{Faster complete search \rm(3\%)}
-Write a function {\tt satcomfast(C)}.
-%
-As before,
-the function takes a CNF formula {\tt C} 
-%(in strict conjuctive normal form) 
-and returns a truth value assignment
-that satisfies {\tt C}.
-If there are no such assignments then {\tt satcomfast} 
-should return {\tt NULL}.
-
-You must implement the improved backtrack search procedure outlined below.
-
-\subsection*{Pseudo code for an improved backtrack search}
-
-\vspace*{1ex}
-
-\begin{tabbing}
-{\bf function} {\tt satcomfast} ({\tt C})
-\end{tabbing}
-
-\noindent
-Follow the same outline as the simple backtrack search,
-except add the following two conditions
-between the first ``{\bf else if}'' and ``{\bf else}'':
-
-
-\begin{tabbing}
-{\bf fu}\={\bf nction} {\tt satcomfast} ({\tt C})
-\kill
-\> {\bf else if}
-\={\tt C} contains a proposition $i$ that occurs only negatively \\
-\>\> or occurs negatively in some clause of length one 
-\\
-\>\> {\tt assign}$[i] := -1$
-\\
-\>\> $r :=$ {\tt satcomfast}(assign $i$ false in {\tt C})
-\\
-\\
-\> {\bf else if}
-\>{\tt C} contains a proposition $i$ that occurs only positively \\
-\>\> or occurs positively in some clause of length one 
-\\
-\>\> {\tt assign}$[i] := 1$
-\\
-\>\> $r :=$ {\tt satcomfast}(assign $i$ true in {\tt C})
-\end{tabbing}
- 
- \subsection{Discussion \rm(2\%)}
- Describe the performance of your two search implementations in terms of {\tt n, k, m}. Be sure to consider both average case and worst-case results (you may wish to construct a pathological case to force worst-case results).
- 
-\newpage
-
-\section{State Search \rm(15\%)}
-
-
-\subsubsection*{The eight-puzzle}
-
-\noindent
-The eight puzzle consists of a $3\times 3$ board with numbered 
-squares $1,...,8$ and a special {\em blank\/} square.
-The blank can be swapped with any square that is immediately above, below, 
-to the left, or to the right of it.
-The goal state is given by the configuration
-%
 \begin{center}
-$\begin{array}[t]{|c|c|c|}\hline
-1 & 2 & 3 \\\hline
-8 &   & 4 \\\hline
-7 & 6 & 5 \\\hline
-\end{array}$
+\input{images/model2a}
 \end{center}
 
-\noindent
-An instance of the eight-puzzle problem is specified by giving an
-initial state. 
-The objective is to find a shortest sequence of
-moves that takes the initial state to the goal state.
-For example
+To generate an image, 
+pick a digit $n$ uniformly at random 
+and retrieve its corresponding image template $D$.
+Then independently pick a random horizontal shear number $h\in\{0,1,2\}$
+(according to the distribution defined in {\tt htrans}),
+and
+a random vertical shear number $v\in\{-1,0,1\}$
+(according to the distribution defined in {\tt vtrans}).
+Then, given $D$, $h$ and $v$, a warped template $W$ is created according to
 
 \[
-\begin{array}{|c|c|c|}\hline
-1 & 3 & 4 \\\hline
-8 &   & 5 \\\hline
-7 & 2 & 6 \\\hline
+w_{ij} \;\;=\;\;\left\{
+\begin{array}{ll}
+d_{\;t(j,i,v)\;t(i,j,h)}
+& \mbox{ if both $1\leq t(j,i,v)\leq 8$ and $1\leq t(i,j,h)\leq 8$}
+\\[2ex]
+1 & \mbox{ otherwise}
 \end{array}
-\begin{array}{c}d\\\rightarrow\end{array}
-\begin{array}{|c|c|c|}\hline
-1 & 3 & 4 \\\hline
-8 & 2 & 5 \\\hline
-7 &   & 6 \\\hline
-\end{array}
-\begin{array}{c}r\\\rightarrow\end{array}
-\begin{array}{|c|c|c|}\hline
-1 & 3 & 4 \\\hline
-8 & 2 & 5 \\\hline
-7 & 6 &   \\\hline
-\end{array}
-\begin{array}{c}u\\\rightarrow\end{array}
-\begin{array}{|c|c|c|}\hline
-1 & 3 & 4 \\\hline
-8 & 2 &   \\\hline
-7 & 6 & 5 \\\hline
-\end{array}
-\begin{array}{c}u\\\rightarrow\end{array}
-\begin{array}{|c|c|c|}\hline
-1 & 3 &   \\\hline
-8 & 2 & 4 \\\hline
-7 & 6 & 5 \\\hline
-\end{array}
-\begin{array}{c}l\\\rightarrow\end{array}
-\begin{array}{|c|c|c|}\hline
-1 &   & 3 \\\hline
-8 & 2 & 4 \\\hline
-7 & 6 & 5 \\\hline
-\end{array}
-\begin{array}{c}d\\\rightarrow\end{array}
-\begin{array}{|c|c|c|}\hline
-1 & 2 & 3 \\\hline
-8 &   & 4 \\\hline
-7 & 6 & 5 \\\hline
-\end{array}
+\right.
 \]
-
-\noindent
-In this assignment you will implement 
-a random initial state generator, {\tt randep},
-and three procedures for solving eight-puzzle problems:
-an iterative deepening search, {\tt ids};
-an iterative deepening $A^*$ search, {\tt idas};
-and a faster version of $\mbox{\it IDA}^*$ search, {\tt idasfast}.
-
-\subsubsection*{Representation}
-To implement these search procedures you will need to represent
-states and actions in simple form.
-For this assignment you will represent states by an array of integers
-where the $i$th location of the array contains the number of the
-square in the $i$th location of the board. 
-The board locations will be indexed
-%
-$\begin{array}[t]{|c|c|c|}\hline
-{\ell}_0 & {\ell}_3 & {\ell}_6 \\\hline
-{\ell}_1 & {\ell}_4 & {\ell}_7 \\\hline
-{\ell}_2 & {\ell}_5 & {\ell}_8 \\\hline
-\end{array}$
-Thus, the goal state,
-$\begin{array}[t]{|c|c|c|}\hline
-1 & 2 & 3 \\\hline
-8 &   & 4 \\\hline
-7 & 6 & 5 \\\hline
-\end{array}$,
-will be represented by an array {\tt \{1, 8, 7, 2, 0, 6, 3, 4, 5 \}},
 where
-the blank square is represented by a {\tt 0}.
-
-\begin{itemize}
-\item
-The action {\em move-up\/} (``{\tt u}'') is implemented by swapping {\tt 0} 
-with
-the number one position to the left, as long as
-{\tt 0} is not in the $\ell_0$, $\ell_3$ or $\ell_6$ position.
-\item
-The action {\em move-down\/} (``{\tt d}'') is implemented by swapping {\tt 0} 
-with
-the number one position to the right of it in the array, as long as
-{\tt 0} is not in the $\ell_2$, $\ell_5$ or $\ell_8$ position.
-\item
-The action {\em move-right\/} (``{\tt r}'') is implemented by swapping {\tt 0} 
-with
-the number three positions to the right (if possible).
-\item
-The action {\em move-left\/} (``{\tt l}'') is implemented by swapping {\tt 0} 
-with
-the number three positions to the left of it in the array (if possible).
-\end{itemize}
-
-\comment{
 %
-$\begin{array}[t]{|c|c|c|}\hline
-{\ell}_0 & {\ell}_1 & {\ell}_2 \\\hline
-{\ell}_3 & {\ell}_4 & {\ell}_5 \\\hline
-{\ell}_6 & {\ell}_7 & {\ell}_8 \\\hline
-\end{array}$
-Thus, the goal state,
-$\begin{array}[t]{|c|c|c|}\hline
-1 & 2 & 3 \\\hline
-8 &   & 4 \\\hline
-7 & 6 & 5 \\\hline
-\end{array}$,
-will be represented by an array {\tt \{1, 2, 3, 8, 0, 4, 7, 6, 5 \}},
-where
-the blank square is represented by a {\tt 0}.
-
-\begin{itemize}
-\item
-The action {\em move-up\/} (``{\tt u}'') is implemented by swapping {\tt 0} with
-the number three positions to the left of it in the array (if possible).
-\item
-The action {\em move-down\/} (``{\tt d}'') is implemented by swapping {\tt 0} with
-the number three positions to the right (if possible).
-\item
-The action {\em move-right\/} (``{\tt r}'') is implemented by swapping {\tt 0} with
-the number one position to the right of it in the array, as long as
-{\tt 0} is not in the $\ell_2$, $\ell_5$ or $\ell_8$ position.
-\item
-The action {\em move-left\/} (``{\tt l}'') is implemented by swapping {\tt 0} with
-the number one position to the left, as long as
-{\tt 0} is not in the $\ell_0$, $\ell_3$ or $\ell_6$ position.
-\end{itemize}
-}
-
-%%%%%%%%%%%%
-\subsection{Generating eight-puzzle problems \rm(1\%)}
-
-Write a function {\tt randep(d)}
-which, for an argument \verb+d+$ \ge 0$, generates a random
-initial state by starting with the goal state and taking $d$ random
-(legal) moves from the goal.
-The function should return an array representing the state it reaches.
-
-%%%%%%%%%%%%
-\subsection{Iterative deepening search \rm(5\%)}
-
-Write a function {\tt ids(s, g)}.
+\begin{eqnarray*}
+t(j,i,v) & = & i+round(v(5-j)/4)
+\\
+t(i,j,h) & = & j+round(h(5-i)/4)
+\end{eqnarray*}
 %
-The function takes two arguments---\verb+s+, an initial state, and
-\verb+g+, a goal state---and returns a shortest list of moves
-{\tt [$m_1$, $m_2$, \ldots $m_k$ ]}
-that takes the initial state \verb+s+ to the goal \verb+g+.
-Each move $m_i$ must be one of characters {\tt l}, {\tt r}, {\tt u},
-or {\tt d}.
-Specifically you must implement an {\em iterative deepening search\/}
-to do this.
-(You can assume a solution exists.)
+Note that the
+{\tt htrans} vector gives the probability of obtaining each 
+horizontal shear value:
+{\tt htrans(1)}$=\PP(h\!=\!0)$,
+{\tt htrans(2)}$=\PP(h\!=\!1)$,
+{\tt htrans(3)}$=\PP(h\!=\!2)$;
+and
+the {\tt vtrans} vector gives the probability of obtaining each 
+vertical shear value:
+{\tt vtrans(1)}$=\PP(v\!=\!-1)$,
+{\tt vtrans(2)}$=\PP(v\!=\!0)$,
+{\tt vtrans(3)}$=\PP(v\!=\!1)$.
 
-\medskip
-
-\noindent
-Thus,
-%
-\begin{verbatim}
-	s = [1,8,7,3,0,2,4,5,6]
-	g = [1,8,7,2,0,6,3,4,5]
-	r = ids.ids(s, g);
-\end{verbatim}
-\comment{
-\begin{verbatim}
-	s = [1,3,4,8,0,5,7,2,6]
-	g = [1,2,3,8,0,4,7,6,5]
-	r = Ids.ids(s, g)
-\end{verbatim}
-}
-%
-should return
-%
-\begin{verbatim}
-	r = [ 'd', 'r', 'u', 'u', 'l', 'd' ]
-\end{verbatim}
-
+Finally, given the warped template, each image pixel $o_{ij}$ is generated 
+independently as before by
+first picking a random noise value $n_{ij}$ and adding it to
+$w_{ij}$ to obtain a raw pixel value $r_{ij}=w_{ij}+n_{ij}$,
+and then thresholding between 1 and 4 to obtain the final observed value.
+%The overall generative model is summarized in the following diagram.
  
 %%%%%%%%%%%%
-\subsection{Iterative deepening $A^*$ search \rm(6\%)}
+\subsection*{Part 3 \rm(Generating from Model 2---1\%)}
+ 
+Write a Matlab function ``{\tt gen2}'' that takes four arguments,
+{\tt digits}, {\tt noise}, {\tt htrans} and {\tt vtrans}, 
+and returns a random image of a 
+digit generated by the model outlined above.
 
-Write a  function {\tt idas(s, g)}
-%
-The precondition and postcondition for this procedure
-are the same as for \verb+ids+.
-However, for this part you must implement the problem solver by using an
-{\em iterative deepening $A^*$ search}.
-Recall that
-{\em ID}$A^*$ requires a heuristic function $\hat{h}(s)$ for estimating
-the number of steps remaining from a state $s$ to a goal $g$.
-Use the following heuristic
-\[
-\hat{h}(s) = \sum_{\mbox{pieces}} \mbox{ distance from piece's location in $s$
-to its target location in $g$}
-\]
-where the distance is calculated by determining the shortest (u,d,l,r) path 
-from a piece's location in $s$ to its goal location in $g$.
 
+\vspace*{1\baselineskip}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\newpage
+\hrule
+
+\subsubsection*{Probability Model 2: Recognition}
+
+\begin{eqnarray*}
+D^*
+& = & \arg\max_D \; \PP(DO)
+\\
+& = & \arg\max_D \; \sum_h\sum_v\sum_N \PP(D)\PP(h)\PP(v)\PP(N)\PP(O|D,h,v,N)
+\\
+& = & \arg\max_D \; \PP(D)\sum_h\PP(h)\sum_v\PP(v)\sum_{n_{11}}\cdots\sum_{n_{88}} 
+\left[\prod_i\prod_j\PP(n_{ij})\right]
+\left[\prod_i\prod_j \PP(o_{ij}|d_{\;t(j,i,v)\;t(i,j,h)\;},n_{ij}) \right]
+\\
+& = & \arg\max_D \; \PP(D)\sum_h\PP(h)\sum_v\PP(v)
+\prod_i\prod_j \sum_{n_{ij}} \PP(n_{ij})\PP(o_{ij}|d_{\;t(j,i,v)\;t(i,j,h)\;},n_{ij})
+\end{eqnarray*}
+
+where %$t(i,j,s)=j+\mbox{round}(s(5-i)/4)$
+%and 
+$\PP(o_{ij}|d_{\;t(j,i,v)\;t(i,j,h)\;},n_{ij})$ is determined as before.
 
 
 %%%%%%%%%%%%
-\subsection{Faster {\em ID}$A^*$ search \rm(3\%)}
+\subsection*{Part 4 \rm(Recognition with Model 2---2\%)}
 
-Write a function {\tt idasfast(s, g)}.
-%
-Implement an efficient method for pruning additional states 
-that results in a significantly faster search than {\tt idas}.
-Come up with an idea for doing this on your own, 
-and clearly document the method you use.
+
+Write a Matlab function ``{\tt rec2}'' that takes five arguments,
+{\tt obs}, {\tt digits}, {\tt noise}, {\tt htrans} and {\tt vtrans},
+%where {\tt obs} is an $8\times8$ image of an observed digit,
+and returns {\tt class} and {\tt probs},
+where {\tt class} is the digit 1,...,9,0 that is most likely given
+{\tt obs}, and {\tt probs} is a $1\times10$ array of the conditional
+probabilities of each digit given {\tt obs}.
+The classification and conditional probabilities are to be calculated
+using the procedures outlined above.
+
+
+\vspace*{1\baselineskip}
+
 
 \newpage
+\hrule
 
+%%%%%%%%%%%%
+\subsubsection*{Probability Model 3: Your own improved model}
+
+%\subsection*{Bonus \rm(2\%)}
+
+Design a probability model that extends either Model 1 or Model 2,
+and achieves better recognition performance (than both models) on the
+test examples in {\tt data}.
+Note that the 1100 images in {\tt data} forms a very large set
+and it would probably take too long to test your model on every image.
+Instead, you can (repeatedly) test the model on 25 randomly chosen
+images for each digit.
+(The TA will apply a similar test to verify that your model is indeed
+an improvement.)
+
+
+%%%%%%%%%%%%
+\subsection*{Part 5 \rm(Derivation of Model 3---1\%)}
+
+Describe your extended probability model.
+Explain how the data can be generated from your model,
+and derive the formulas needed for recognition
+and for calculating the conditional probabilities of digits given images
+in your model.
+Please typeset your answer neatly (in whatever typesetting tool you prefer),
+and convert it to PDF format for submission.
+Submit the brief write-up in a file called note3.pdf.
+
+
+%%%%%%%%%%%%
+\subsection*{Part 6 \rm(Generation with Model 3---1\%)}
+
+Write a Matlab function ``{\tt gen3}'' that takes
+{\tt digits}, {\tt noise} and some other parameters,
+and returns a random image generated by your extended model.
+
+
+%%%%%%%%%%%%
+\subsection*{Part 7 \rm(Recognition with Model 3---2\%)}
+
+Write a Matlab function ``{\tt rec3}'' that takes
+{\tt obs}, {\tt digits}, {\tt noise} and some other parameters,
+and returns {\tt class} and {\tt probs},
+where {\tt class} is the digit 1,...,9,0 that is most likely given
+{\tt obs}, and {\tt probs} is a $1\times10$ array of the conditional
+probabilities of each digit given {\tt obs}.
 
 \end{document}

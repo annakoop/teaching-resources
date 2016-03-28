@@ -32,7 +32,7 @@ EIGHT = {'onem': [1, 8, 7, 2, 6, 0, 3, 4, 5],
          #'hard2': [6, 0, 3, 4, 1, 8, 7, 2, 5],
          }
 
-SOLVED_EIGHT = tuple(EIGHT['correct'])
+SOLVED_EIGHT = [1, 8, 7, 2, 0, 6, 3, 4, 5]
 
 
 ###### SAT testing - Question 1

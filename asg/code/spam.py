@@ -59,7 +59,7 @@ def parse_email(path_to_emails, label_file, output="train.arff"):
     #    print("Could not open output file")
     #fout.write(",".join(names)+"\n")    
     
-    max_files = 100
+    max_files = 10
     i = 0
     for file in contents:
         i += 1
@@ -75,7 +75,7 @@ def parse_email(path_to_emails, label_file, output="train.arff"):
             # apply our feature extraction functions
             common = most_frequent_words(text, k=num_words)
             words = [c[0] for c in common]
-            data.append([labels[file]]+words)
+            data.append([int(labels[file])]+words)
             #t = ",".join([labels[file]]+words)
             #fout.write(t+"\n")
         print("Done")

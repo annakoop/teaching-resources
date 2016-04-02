@@ -20,6 +20,13 @@
 *.bbl
 *.bcf
 *.blg
+=======
+*.pdf
+
+## Bibliography auxiliary files (bibtex/biblatex/biber):
+.bbl
+.bcf
+.blg
 *-blx.aux
 *-blx.bib
 *.brf
@@ -33,6 +40,14 @@
 *.pdfsync
 
 ## Auxiliary and intermediate files from other packages:
+=======
+.synctex
+.synctex.gz
+.synctex.gz(busy)
+*.pdfsync
+
+## Auxiliary and intermediate files from other packages:
+
 # algorithms
 *.alg
 *.loa
@@ -157,3 +172,6 @@ pythontex-files-*/
 
 # Latexian
 TSWLatexianTemp*
+# WinEdt
+*.bak
+*.sav

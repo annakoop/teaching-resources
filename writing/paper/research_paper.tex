@@ -1,0 +1,113 @@
+\documentclass{article} % For LaTeX2e
+\usepackage{nips15submit_e,times}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{graphicx}
+
+%\documentstyle[nips14submit_09,times,art10]{article} % For LaTeX 2.09
+
+
+\title{General Experimental Research Paper Outline}
+
+
+\author{
+Anna Koop\\
+Department of Science, Augustana Faculty\\
+University of Alberta\\
+Camrose, AB T4V 2R3 \\
+\texttt{akoop@ualberta.ca}
+}
+
+% The \author macro works with any number of authors. There are two commands
+% used to separate the names and addresses of multiple authors: \And and \AND.
+%
+% Using \And between authors leaves it to \LaTeX{} to determine where to break
+% the lines. Using \AND forces a linebreak at that point. So, if \LaTeX{}
+% puts 3 of 4 authors names on the first line, and the last on the second
+% line, try using \AND instead of \And before the third author name.
+
+\newcommand{\fix}{\marginpar{FIX}}
+\newcommand{\new}{\marginpar{NEW}}
+
+\nipsfinalcopy % Uncomment for camera-ready version
+
+\begin{document}
+
+
+\maketitle
+
+\begin{abstract}
+The abstract should be a brief explanation of the major contribution of the project. It should answer the question "Who should read this paper and why?" Use your research question as a guideline. For a good discussion of developing a research question, see \cite{Wright1999}.
+\end{abstract}
+
+\section{Introduction}
+\label{sec:intro}
+Don't bury the lede! Start with something that hooks the reader. Why do they care?
+
+\begin{itemize}
+\item What field does this relate to?
+\item What general background knowledge is assumed?
+\item Why is this project interesting or relevant?
+\end{itemize}
+
+\section{Background}
+\label{sec:background}
+Provide detailed background information here and situate your work in the current state-of-the-art.
+
+Explain any technical terminology and keep its usage clear and consistent.
+Explain how what you are doing is different from what has already been done.
+
+\section{Methodology}
+\label{sec:methods}
+Here you explain what you did. Present the experimental design here: what you did and how you did it. The research question and background should already be clear, so this is now focused on specifics.
+
+\subsection{Experiment Settings}
+\label{sec:exp}
+If reporting clock times, include details of the hardware it was tested on. If including survey results, explain the questions. Depending on field, there should be enough detail that someone could reasonably replicate your results. See Whitesides' paper for a good discussion from the chemistry perspective \cite{Whitesides2004}.
+
+\section{Results}
+\label{sec:results}
+This should present the empirical results. Use whatever format is appropriate for clearly conveying the information. Sometimes this section is combined with the discussion section (\ref{sec:discussion}).
+
+The text should provide a detailed explanation of the results, pointing out particular relevant details.
+
+\begin{figure}[h]
+\label{fig:myGraph}
+\begin{center}
+\includegraphics[width=.2\textwidth]{placeholder.jpg}
+\end{center}
+\caption{Figure captions should briefly describe the content of the figure. Graphs should be clearly labeled and created in such a way that the black-and-white version is still clear.}
+\end{figure}
+
+\begin{table}[t]
+\label{tab:myTable}
+\caption{Table of results for this interesting experiment comparing these particular methods.}
+\begin{center}
+\begin{tabular}{ll}
+\multicolumn{1}{c}{\bf PART}  &\multicolumn{1}{c}{\bf DESCRIPTION}
+\\ \hline \\
+Dendrite         &Input terminal \\
+Axon             &Output terminal \\
+Soma             &Cell body (contains cell nucleus) \\
+\end{tabular}
+\end{center}
+\end{table}
+
+\section{Discussion}
+\label{sec:discussion}
+Here is where the synthesis and analysis occurs. Explain what the relevant results actually mean. How do they answer (or not answer) your research question(s)?
+
+Any anomalies should be discussed explicitly. Speculate on causes but carefully: if it is a testable hypothesis, then test it. Aim to have empirically-supported claims.
+
+\section{Conclusion}
+Not merely a restatement of results or discussion, but explaining the overall conclusions. What has this work shown us? How is it relevant to the field and to other work in this area?
+
+\subsection{Future Work}
+\label{sec:future}
+This is a good place to propose further interesting questions. What lines of inquiry has your research uncovered as particularly important? What are your next steps?
+
+
+%\subsubsection*{References}
+\bibliographystyle{apalike}
+\bibliography{research}
+\end{document}

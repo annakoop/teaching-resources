@@ -1,0 +1,255 @@
+\documentclass[oneside]{article} % For LaTeX2e
+\usepackage{workshop}
+\usepackage{lipsum}
+%\usepackage{showframe}
+\title{Research Paper Workshop}
+\Instructor{Anna Koop}
+\Class{AUCSC 415}
+
+\begin{document}
+
+
+
+%\noindent
+%Department of Science\\
+%University of Alberta, Augustana Faculty\\
+%{\bf Instructor}: Anna Koop, HB 1-31, akoop@ualberta.ca
+
+\maketitle
+%%%%%%%%%%%%%%%%%%% Research Question
+
+\section{Research Question}
+\completeline{I am working on the topic of}
+%\underline{\phantom{\huge{big picture}}}
+
+\completeline{to discover/better understand}.
+%\vspace*{1.5\baselineskip}
+% \makebox[\textwidth]{to find out\bigskip\enspace\hrulefill}
+
+\completeline{This will benefit others by}.
+
+%\subsection{Kind of question:}
+%Is it a conceptual question, designed to bring clarity to some issue or problem? Is it a practical question, designed to provide an improved process? Is it an applied question, meant to deepen understanding of the problem? \cite{Desjargins2010}.
+
+\subsection*{Scope}
+
+\completeline{While the general goal of my research is to}
+
+\qline,
+
+\shortblock{I will be restricting my investigation to the specific case(s) of}
+
+\subsection*{Question Reframing}
+Rewrite variants of your research question framed as ``how'' and ``why'' questions.
+
+\completeline{How}?
+
+\completeline{Why}?
+
+\shortblock{I will be arguing/will demonstrate that}
+
+\shortblock{I will summarize/compare and contrast}
+
+
+\subsection*{Evaluation}
+\shortblock{I will know that I have addressed the question when}
+
+\shortblock{The specific measurables I will be using are}
+
+\shortblock{The results I hope to get are}
+
+\shortblock{Negative results will show that}
+
+
+\subsection*{My research question}
+\qbox
+%\lipsum[1-5]
+\newpage
+
+%%%%%%%%%%%%%%%%%%% Overview
+
+\section{The 5 Cs}
+\label{sec:cs}
+High-level details to direct your writing.
+
+\subsection*{Category}
+\label{sec:cat}
+What type of research is this?
+
+\begin{center}
+\begin{tabular}{ p{1.5cm} p{6.5cm} p{1.5cm} p{6.5cm}}
+ Empirical & \begin{checklist}
+ \item evaluation of a novel algorithm
+ \item application to a new domain
+ \item novel evaluation of existing algorithms
+ \item adaptation of existing algorithm
+ \end{checklist}&
+ Synthesis & \begin{checklist}
+ \item comparison of existing methods
+ \item case study evaluation
+ \item literature survey in subfield
+ \item meta-analysis of previous studies
+ \end{checklist} \\
+Theoretical & \begin{checklist}
+\item mathematical proof
+\item algorithmic analysis
+\item novel application of theory
+ \end{checklist} &
+Experiential & \begin{checklist}
+ \item implementation of a specific system
+ \item position paper
+ \item tutorial
+ \end{checklist}\\
+ \end{tabular}
+ \end{center}
+ 
+\subsection*{Context}
+\label{sec:context}
+
+\completeline{Research context:}
+\writelines{1}
+
+\qlist{relevant papers/authors}{5}
+%\writelist{5}%{Related papers/authors}
+
+%\writelist{Keywords}{5}
+
+\subsection*{Correctness}
+\label{sec:corr}
+\shortblock{Evidence I will use to support my conclusion}
+
+\shortblock{Assumptions about the problem setting}
+\subsection*{Contributions}
+\label{sec:contrib}
+
+\qbox[5]
+
+\subsection*{Clarity}
+\label{sec:clarity}
+\completeline{Audience:}.
+
+\shortblock{Expected background}
+
+\prompt{Background concepts that will need to be explained}{3}
+
+\shortblock{Notation that will need to be defined}
+
+\longblock{Potential graphs/illustrations}
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%% Paper Outline
+\section{Outline}
+\label{sec:outline}
+
+Now that you have thought about your work in broad terms, start fitting the pieces into an outline. This provides a more detailed structure for the content of the paper.
+
+\writelines{2}
+\prompt{Potential titles}{3}
+
+\subsection{Introduction}
+\label{sec:intro}
+\completeline{The problem of}
+
+\completeline{is important to}
+
+\completeline{because}
+
+\qline.
+
+\writelines{.5}
+\qlist{concrete examples that illustrate the problem}{3}
+
+
+\shortblock{The problem is currently unsolved because}
+
+\completeline{My approach is to}
+
+\qline.
+
+\subsection{Method}
+\label{sec:method}
+\shortblock{The intuition behind my solution is}
+
+\longblock{The details are}
+
+Choose your favourite example from~\ref{sec:intro} and explain how your method solves that specific problem.
+\qbox
+
+\shortblock{Other important details about my solution/findings}
+\newpage
+%%%%%%%%%%%%%%%%%%% Conclusion
+
+\subsection{Experiment Design}
+\label{sec:exp}
+\shortblock{I will test my method/validate my results by}
+
+\longblock{Explain why this is a useful evaluation}
+
+\shortblock{Assumptions I am making in the experiment}
+
+\shortblock{Tools I will need (software, data, etc.)}
+
+\subsection{Results}
+\label{sec:results}
+\shortblock{I expect the results to show}
+
+\shortblock{I will illustrate the results with}
+
+\subsection{Discussion}
+\label{sec:disc}
+
+\qlist{measurable results}{3}
+
+\shortblock{These illustrate the usefulness of a solution method because}
+
+\shortblock{These support my solution in particular because}
+
+%%%%%%%%%%%%%%%%%%% Conclusion
+
+\subsection{Related Work/Literature Survey}
+\label{sec:lit}
+Look at the papers or researchers you listed in Section~\ref{sec:context}. 
+
+\prompt{Each is relevant because}{5}
+
+\prompt{My work is related because}{5}
+
+\prompt{My work is different because}{5}
+
+\shortblock{Strengths of my method}
+
+\shortblock{Weaknesses of my method}
+
+%%%%%%%%%%%%%%%%%%% Conclusion
+
+\subsection{Future Work}
+\label{sec:future}
+
+\prompt{Questions that arose during research}{3}
+
+\prompt{Ideas I haven't yet implemented}{3}
+
+\longblock{Connection to existing work}
+
+\subsection{Conclusion}
+\label{sec:conclusion}
+What conclusions can I currently draw with respect to my research question? 
+\qbox
+
+How are my results useful to the field referenced in Section~\ref{sec:context}? 
+\qbox
+
+%%%%%%%%%%%%%%%%%%% Abstract
+
+\section{Abstract}
+\label{sec:abs}
+Write an approximately 250-word abstract for your paper, as if the work is done. An abstract succinctly describes the contribution of the paper. It should provide brief info about the motivating purpose, the methodology, the results, and conclusions.
+\begin{compactlist}
+\item What is the problem?
+\item Why is it interesting?
+\item What does my solution achieve?
+\item What is the ultimate result?
+\end{compactlist}
+
+\end{document}

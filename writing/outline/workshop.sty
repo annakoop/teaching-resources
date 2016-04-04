@@ -41,9 +41,14 @@
 \def\Class#1{\def\@Class{#1}}
 \def\Instructor#1{\def\@Instructor{#1}}
 \def\Campus#1{\def\@Campus{#1}}
+\def\Email#1{\def\@Email{#1}}
 \Instructor{Prof}
 \Class{AUXXX XXX}
 \Campus{Augustana}
+\Email{}
+
+\def\Version#1{\def\@Version{#1}}
+\Version{0.9}
 
 %%%%%%%%%%%%%%%%%%%
 %%  LAYOUT
@@ -173,6 +178,7 @@
 \fancypagestyle{plain}{%
 	\fancyhf{} % clear everything
 	\fancyfoot[R]{\nofm}
+	\fancyfoot[L]{V. \@Version, comments to \@Email}
 	\renewcommand{\footrulewidth}{0pt}
 	\renewcommand{\headrulewidth}{0pt}
  }%

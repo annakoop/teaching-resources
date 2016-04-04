@@ -1,6 +1,7 @@
 \documentclass[12pt]{article}
 \usepackage{fullpage}
 \usepackage{epsf}
+\usepackage{url}
 
 \input{commands}
 
@@ -12,7 +13,7 @@
 \vspace*{1\baselineskip}
 
 \noindent
-{\large\bf Assignment : }
+{\large\bf Assignment 4: Classification Analysis}
 
 \vspace*{1\baselineskip}
 
@@ -27,7 +28,7 @@ University of Alberta, Augustana Faculty
 \vspace*{0.75\baselineskip}
 
 \noindent
-{\bf Due}: through eClass, {\em Thursday, February 11}\\
+{\bf Due}: through eClass, {\em Monday, April 4}\\
 {\bf Worth}: 25\% of final grade
 \\
 {\bf Instructor}: Anna Koop, HB 1-31, akoop@ualberta.ca
@@ -50,27 +51,46 @@ Submit all required documents in a zip or tar archive.
 
 \hrule
 
+\section{Using Weka}
+You will be using Weka to analyze various classification methods on two data sets: the MNIST hand-written digit set and a spam email corpus. You will be comparing different learning algorithms, investigating the effect of parameter settings, and exploring feature generation possibilities.
 
 %%%%%%%%%%%%
-\subsection*{Question 1 \rm(--5\%)}
-\begin{figure}[bt]
-\caption{A (claimed) full-adder circuit}
-\label{fig:adder}
-\centering
+\section{Classification Comparison \rm(--12\%)}
+MNIST arff files can be downloaded from here: \url{http://www.cs.ubc.ca/labs/beta/Projects/autoweka/datasets/mnist.zip}.
+
+Load the MNIST data set into Weka and choose two classification algorithms. You may choose any algorithms, but you must know how they work. Run a series of experiments. Be sure to find the parameter settings for each algorithm that work best for the data. Present the results and discuss.
+
+\subsection{Understanding classifiers \rm(--5\%)}
+How do they work? What optimization criteria do they use? 
+
+\subsection{Evaluation \rm(--4\%)}
+Which does a better job? For what definition of "better??
+
+\subsection{Evaluation \rm(--4\%)}
+What parameter settings are best and why do you think that is?
+
+%\begin{figure}[bt]
+%\caption{|
+%\label{fig:}
+%\centering
 %\includegraphics[width=.6\textwidth]{full_adder.png}
-\end{figure}
+%\end{figure}
 
 
 %%%%%%%%%%%%
-\subsection*{Question 2 \rm(---5\%)}
+\subsection{Understanding Features \rm(---13\%)}
+Use the Spam Email corpus at this page: http://csmining.org/index.php/spam-email-datasets-.html. Note that the provided ExtractContent.py file runs in python 2.5 (your grader prefers to use python 3.x whenever possible).
 
-%%%%%%%%%%%%
-\subsection*{Question 3 \rm(---5\%)}
+Your first step is to load the Training data into Weka. This will require pre-processing to convert the directories of spam/ham email into a data format Weka recognizes.
+\subsection{Basic Features \rm(--2\%)}
+Explain the initial features (or attributes). 
 
-%%%%%%%%%%%%
-\subsection*{Question 4 \rm(---5\%)}
+\subsection{Feature transformations \rm(--5\%)}
+What filters did yo apply to transform the data? Did you compute any new features? Did they work?
 
-%%%%%%%%%%%%
-\subsection*{Question 5 \rm(---5\%)}
+\subsection{Evaluation \rm(--5\%)}
+What features worked best? Why do you think they did?
 
+\subsection{Interaction of parameters and features \rm(--3\%)}
+Did the same parameter setting seem to work best for all the feature sets you tried? You do not have to exhaustively compare, but do enough random samples to get a sense of whether this holds.
 \end{document}

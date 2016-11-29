@@ -10,75 +10,109 @@
 \Department{Department of Science}
 
 
-\AsgNum{3}
-\AsgTitle{Prolog Intro Assignment}
-\Due{11:55pm, Nov 10, 2016}
-\Total{3}
+\AsgNum{Final}
+\AsgTitle{Assigning Preferences}
+\Due{11:55pm, Dec 14, 2016}
+\Total{30}
 
-\title{Pet Matching}
+\title{Assigning Ranked Preferences}
 
 \begin{document}
 
 \maketitle
 \section*{Objectives}
 \begin{itemize}
-\item To become familiar with Prolog syntax and semantics.
-\item To become acquainted with the techniques of declarative programming.
-\item To understand how knowledge bases and queries are used to solve problems.
+\item To demonstrate your ability to think in different programming styles.
+\item To examine the strengths and weaknesses of Scheme, Prolog, and C in a real-world problem.
+\item To experience and reflect on how different programming paradigms approach the same problem.
 \end{itemize}
 
-\section*{Specification}
-Write a Prolog problem to match available animals to potential foster families. The knowledge base will be populated from an initial list of potential homes and animals needing homes, and you will have the ability to add new animals or adoptees as well.
+\section*{Problem Specification}
+Beginning in 2017, First-year students to Augustana will be enrolled in a "First Year Seminar", a 3-week discussion-based research course designed to introduce new students to university-level scholarship. A wide variety of seminars have been proposed, but space is limited.
 
-Given the existing animals and families, the user should be able to call up a list matching the most animals with homes.
+New students will be asked to pick their top three choices from the available classes. Then comes the difficult task of actually assigning students to classes in a way that respects physical constraints (no more than 25 per class, and only one offering of each class) while optimizing happiness (as much as possible we want people to get their top choices).
+
+\section*{Program Specification}
+Computers to the rescue. You will write three versions of the program for doing this: one in C, one in Scheme, and one in Prolog. We will use a simple scoring mechanism for evaluating the quality of the match. The match will give every student a disappointment number: 0 if they got into their first choice, 1 for second, 2 for third, and 5 for being assigned one they did not choose. The total score is the sum over all students. 
+
+This means 0 is perfection---everyone got into their first choice. Highly unlikely. Optimizing the assignment is a difficult problem in general so you {\em do not} have to find the single best solution for the given data. The score is simply to evaluate the matches programs find.
+
+\subsection*{Input}
+
+The data structures and control flow are completely up to you and, of course, will be different for each language. The input you have to work with will be in two text files. First gives the full list of course identifiers and possible associated information, eg:
 \begin{lstlisting}[language=Lisp]
-?- match.
+	FYS111, Drugs
+	FYS112, Murder!
+	FYS113, How to be a Doctor
+	FYS114, Machine Apocalypse
+	...
 \end{lstlisting}
-Should return a nicely-formatted list of families and recommended animals. Any animals that could not be matched with a family should be displayed along with information about why they could not be matched.
-
-\section*{Initial Animals}
-
-
-\section*{Initial Foster Families}
-
-\section*{Specification}
-For full marks, implement your solution such that the puzzle can be solved by the query?- solve.
-In this case, your Prolog program should format the results in tabular form, with the headings and spacing illustrated in the following table.   Stall   Horse     Child    Age   -----  --------  --------  ---     1    Topper    Theresa     9     2    Boris     Lily       10     3    Hunter    Roy        14     4    Lady      Curtis     15     5    Santa Fe  Brian      12     6    Ranger    Michelle    7Note that the body of this table does not constitute a correct solution to the puzzle. However, the table shows that the horses? and children?s names should be left-aligned and the children?s ages should be right aligned under their respective headings.If you do not have time to do the appropriate formatting of the results, you may submit for reduced marks a program which presents the correct result as a list of sublists of the form[[horse1, child1, age1], [horse2, child2, age2], . . . ]This program would be invoked by querying the solve/1 predicate (i.e., a solve predicate ofarity 1), as in?- solve(S).It would return the same data as illustrated in the table above in the following form:   [[topper, theresa, 9], [boris, lily, 10], [hunter, roy, 14],[lady, curtis, 15], [santa_fe, brian, 12], [ranger, michelle, 7]]A program which implements solve/1 but does not correctly implement solve/0 (i.e., does not produce correctly formatted tabular output) will be penalized by 10%.
-
-
-\section*{Hints on Formatting}
-It is easy to convert an implementation of the solve/1 predicate to the zero-arity form: just add a top-level predicate such as the following and implement the output formatting predicates below a general predicate such as write_solution/1.\begin{lstlisting}[language=Lisp]
-   solve :-     solve(Stable),     \% Write the solution in formatted form.     write_solution(Stable).\end{lstlisting}
-The header is easily generated using the write/1 predicate, since the argument to write can be a single-quoted constant, as in
-
+The second gives a list of students and their top three preferences.
 \begin{lstlisting}[language=Lisp]
- write('This is a string constant.').\end{lstlisting}
-
-Remember that, in Prolog, the name of a constant can be capitalized and include spaces if the name is enclosed in single quotes, while a string in double quotes is equivalent to a list of integers (i.e., ASCII codes):\begin{lstlisting}[language=Lisp]
-   write("Hello").\end{lstlisting}
-results in\begin{lstlisting}[language=Lisp]
-[72, 101, 108, 108, 111]\end{lstlisting}
-
-SWI Prolog also provides a {\texttt writef/2} predicate which implements formatted output. For a fullspecification of the predicate, use Prolog?s help facility:\begin{lstlisting}[language=Lisp]
-   help(writef).\end{lstlisting}
-The predicate resembles C?s printf function in that the first argument is a format string; however, the second argument is a list of the arguments to be inserted at the points specified by escape sequences in the format string.As an example of the use of {\texttt writef}, 
- 
-\begin{lstlisting}[language=Lisp]
- writef('\%5r', [Age]).
+	1011111, FYS114, FYS111, FYS122
+	1011112, FYS111, FYS122, FYS199
+	...
 \end{lstlisting}
- prints the value of the variable Age right-aligned in a field of width 5.
 
-It would be poor design to implement {\texttt write_solution/1} as a long sequence of {\texttt write|}, {\texttt writef}, and {\texttt nl} terms, one set for each stall in the stable. Instead, it should probably format the header, then call a subsidiary predicate which would iterate through the stable (extracting the head of the list and calling itself recursively on the tail of the list until the stable is reduced to the empty list), calling another subsidiary predicate to format each line of the body of the table (each stall). The stall number could be specified by a second argument to the subsidiary predicate, which is increased by one on each recursive call.
- 
+\subsection*{Output}
+Your program will read these files and display a table assigning students to each class:
+\begin{lstlisting}[language=Lisp]
+	FYS111, 1011111, 1011113, 1011114, 1022222...
+	FYS112, 1111112, 1011112, 1011115, 1022223...
+	...
+\end{lstlisting}
+
+A proper solution must satisfy the following characteristics:
+\begin{itemize}
+\item All students are assigned to one and only one class.
+\item All student identifiers are valid.
+\item No class has more than 25 students.
+\item All class identifiers are valid.
+\item No class has less than 10 students\footnote{This restriction may be changed after consultation with stakeholders}.
+\item The matching score passes a minimum bar\footnote{TBD and posted in eClass}.
+\end{itemize}
+
+\section*{Report}
+
+In addition to the three program files, you will submit a (no more than 3-page) report. Your report should examine the strengths and weaknesses of each particular language {\em and} overall language paradigm for the task. 
+
+\subsection*{Introduction}
+Start with a brief, high-level description of your approach in each language. This includes what data structures and control flow you used or took into account.
+
+\subsection*{Body}
+The focus of the report is on comparing and contrasting your use of the languages for this problem. What was different about the algorithm or program structure in each? What was similar? You may include personal details (eg. difficulty, time) as well as technical information (eg. efficiency, readability, etc).
+
+\subsection*{Conclusion}
+Conclude with a recommendation for the 'best' language for this problem. Be sure to support your recommendation appropriately.
+
+This is a formal report and you will be graded on clarity, structure, and grammar as well as the critical thought and  knowledge demonstrated in the report.
+
+
 \section*{Grading}
-Your solution should display the following characteristics:
-\subsubsection*{Correctness, 50\%}
-The program should conform to the specifications for which it was written. It should include correct handling of special cases, error conditions, etc.
-\subsubsection*{Design and Efficiency 20\%} The program should be constructed from small, coherent, independent and loosely coupled functions. Each function should access only its own local variables and parameters and, in some cases, global constants. The control constructs and data structures used should be those appropriate to the problem at hand. The program should not perform unnecessary steps, use extraneous variables, nor implement the algorithm in a contorted or inefficient way.
-\subsubsection*{Style and Documentation 20\%} The program should conform to generally accepted principles of style, such as a consistent pattern of indentation, use of meaningful identifiers and defined constants, generous use of space, etc. Internal documentation should include program and function headers, and in-line comments to clarify the code.
-\subsubsection*{Knowledge of the language 10\%} Your program should provide evidence of your familiarity with the principal control constructs, operators, built-in functions, and data structuring facilities of the assigned language. 
 
-In the case of Scheme, you should also demonstrate your grasp of the principles of functional programming. Comments should be prefixed according to the standard practice in Scheme.
+Each program is marked out of 50 and worth 5\% of your final grade. The report is marked out of 60 and is worth 15\% of your final grade.
+
+\subsection*{Program Code}
+Code compiles (on park) according to instructions and/or runs in the (web-based) interpreters without error. /15
+
+The results are displayed in a readable format according to the specification. The results are valid according to the given criteria. /10
+
+The code is well documented and readable. /10
+
+The solution approach is appropriate for the given language. /10
+
+The code demonstrates skill in the language constructs and idioms. /5
+
+\subsection*{Report}
+The report is complete. It provides overview, detail, and comparison between all the languages as described in the specification. /10
+
+The report is well organized, grammatically correct, and clear. /10
+
+The report is factually correct and accurately explains relevant concepts. /20
+
+The report demonstrates thoughtfulness and insight in relation to both project and course concepts. /20
+
+
 %%%%%%%%%%%%
 %\begin{figure}[bt]
 %\label{fig:adder}

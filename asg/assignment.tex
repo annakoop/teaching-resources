@@ -1,5 +1,6 @@
 \documentclass[12pt,info]{asg}
 % General info for the asg.cls file to load
+\usepackage[normalem]{ulem}
 \Instructor{Anna Koop}
 \Campus{University of Alberta, Augustana}
 \Email{akoop@ualberta.ca}
@@ -10,7 +11,7 @@
 \Department{Department of Science}
 
 
-\AsgNum{Final}
+\AsgNum{Final.2}
 \AsgTitle{Assigning Preferences}
 \Due{11:55pm, Dec 14, 2016}
 \Total{30}
@@ -30,16 +31,21 @@
 \section*{Problem Specification}
 Beginning in 2017, First-year students to Augustana will be enrolled in a "First Year Seminar", a 3-week discussion-based research course designed to introduce new students to university-level scholarship. A wide variety of seminars have been proposed, but space is limited.
 
-New students will be asked to pick their top three choices from the available classes. Then comes the difficult task of actually assigning students to classes in a way that respects physical constraints (no more than 25 per class, and only one offering of each class) while optimizing happiness (as much as possible we want people to get their top choices).
+New students will be asked to pick their top  choices from the available classes. Then comes the difficult task of actually assigning students to classes in a way that respects physical constraints (no more than 25 per class, and only one offering of each class) while optimizing happiness (as much as possible we want people to get their top choices).
+
+For next year, students will be choosing through a online form that outputs an Excel-compatible file. Someone will be manually processing that file in order to assign students to classes in as fair and accommodating a way as possible. Of course this raises a lot of questions about what is fair and how student preferences should be taken into account. And for all of those questions, how strong is the effect of the answer? 
+%Are three choices from every student enough, considering we want to minimize random assignment as much as possible? Will students tend to select only a small number of classes or will we have a good variety of interest? What is a reasonable minimize size of class? How many classes do we need to provide as options?
 
 \section*{Program Specification}
-Computers to the rescue. You will write three versions of the program for doing this: one in C, one in Scheme, and one in Prolog. We will use a simple scoring mechanism for evaluating the quality of the match. The match will give every student a disappointment number: 0 if they got into their first choice, 1 for second, 2 for third, and 5 for being assigned one they did not choose. The total score is the sum over all students. 
+Computers (somewhat) to the rescue. You will write three versions of the program for doing this course assignment: one in C, one in Scheme, and one in Prolog. We will use a simple scoring mechanism for evaluating the quality of the match. The match will give every student a disappointment number: 0 if they got into their first choice, 1 for second, 2 for third, and 5 for being assigned one they did not choose. The total score is the sum over all students. 
 
-This means 0 is perfection---everyone got into their first choice. Highly unlikely. Optimizing the assignment is a difficult problem in general so you {\em do not} have to find the single best solution for the given data. The score is simply to evaluate the matches programs find.
+This means 0 is perfection---everyone got into their first choice. Highly unlikely. Optimizing the assignment is a difficult problem in general so you {\em do not} have to find the single best solution for the given data. The score is simply to evaluate the quality of your program's solution.
 
 \subsection*{Input}
 
-The data structures and control flow are completely up to you and, of course, will be different for each language. The input you have to work with will be in two text files. First gives the full list of course identifiers and possible associated information, eg:
+The data structures and control flow are completely up to you and, of course, will be different for each language.
+\sout{The input you have to work with will be in two text files. First gives the full list of course identifiers and possible associated information, eg:}
+You may hard-code classes into your source rather than deal with file input and output. Class identifiers are formatted as FYSXXX where XXX is a unique number for each class, eg:
 \begin{lstlisting}[language=Lisp]
 	FYS111, Drugs
 	FYS112, Murder!
@@ -47,12 +53,15 @@ The data structures and control flow are completely up to you and, of course, wi
 	FYS114, Machine Apocalypse
 	...
 \end{lstlisting}
-The second gives a list of students and their top three preferences.
+
+The most significant data structure gives a list of students and their top three preferences. Student numbers again may be made up however you like as long as each student has a unique numeric identifier.
 \begin{lstlisting}[language=Lisp]
 	1011111, FYS114, FYS111, FYS122
 	1011112, FYS111, FYS122, FYS199
 	...
 \end{lstlisting}
+
+A third thing you may consider (but do not have to implement) is how other student information may be factored in: for example, time of registration, per-class diversity of student body in personal background and majors, etc. Discussing how these might be considered and how they would affect the assignment algorithm will be an excellent way to demonstrate critical thought.
 
 \subsection*{Output}
 Your program will read these files and display a table assigning students to each class:
@@ -66,11 +75,15 @@ A proper solution must satisfy the following characteristics:
 \begin{itemize}
 \item All students are assigned to one and only one class.
 \item All student identifiers are valid.
-\item No class has more than 25 students.
 \item All class identifiers are valid.
-\item No class has less than 10 students\footnote{This restriction may be changed after consultation with stakeholders}.
-\item The matching score passes a minimum bar\footnote{TBD and posted in eClass}.
+\item No class has more than \sout{25} X or less than \sout{10} Y students.
+\item No class has less than \sout{10} Y students
+\item \sout{The matching score passes a minimum bar}\footnote{\sout{TBD and posted in eClass}
+Given we do not have access to a full-sized data file, I will be manually evaluating quality according to the metric given with your test structures.
+}.
 \end{itemize}
+
+You should set up your code such that the maximum and minimum number of students can be easily adjusted. Since we are manually entering the data for now, you will not be expected to include the 300 or so students that will actually be using the system. Rather, your code should be set up such that it is easy to adjust the input and numbers appropriate.
 
 \section*{Report}
 
@@ -81,6 +94,8 @@ Start with a brief, high-level description of your approach in each language. Th
 
 \subsection*{Body}
 The focus of the report is on comparing and contrasting your use of the languages for this problem. What was different about the algorithm or program structure in each? What was similar? You may include personal details (eg. difficulty, time) as well as technical information (eg. efficiency, readability, etc).
+
+A secondary aspect of the report is providing critical observations of the algorithms used. Independent of the code itself, what did you find in the quality of the solutions? What things does the programmer of the ultimate assignment code need to consider? What Excel macros (i.e. short functions) will be useful/critical to simplify the process for them?
 
 \subsection*{Conclusion}
 Conclude with a recommendation for the 'best' language for this problem. Be sure to support your recommendation appropriately.

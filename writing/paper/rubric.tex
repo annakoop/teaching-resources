@@ -1,0 +1,60 @@
+\documentclass{article}
+\usepackage[landscape,margin=.5in]{geometry}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{tabularx}
+
+\title{Rubric}
+\begin{document}
+\thispagestyle{empty}
+
+\begin{table}[t]
+\label{tab:myTable}
+\begin{center}
+%\begin{tabular}{ l| p{.1\linewidth}|p{.1\linewidth} | p{.1\linewidth}|p{.1\linewidth}|p{.1\linewidth} | p{.1\linewidth}|p{.1\linewidth} | p{.1\linewidth}|p{.1\linewidth} }
+\begin{tabular}{ l | *{9}{p{.1\linewidth}|}}
+ & \multicolumn{2}{c}{Excellent} 
+ & \multicolumn{3}{c}{Good} 
+ & \multicolumn{2}{c}{Needs Work}
+ & \multicolumn{2}{c}{Troubling} \\\hline
+\multicolumn{10}{l}{\bf Experience} \\\hline
+Fun &  16 & 14 & 12 & 10 & 8 & 6 & 4 & 2 & 0\\ \hline
+40\% 
+	& \multicolumn{2}{p{.2\linewidth}|}{Amazingly fun to play and immediately want to play again. Full of meaningful decisions and dramatic tension. Theme, mechanics, and presentation all contribute seamlessly. Creates a unique and engaging playing experience. }
+	& \multicolumn{3}{p{.3\linewidth}|}{Okay to play, with periodic moments of fun. There are meaningful decisions and tension, but not reliably sustained throughout the course of play. Theme, mechanics, and presentation adequately support the experience. There is potential, but would not be excited to play again without further modifications.}
+	& \multicolumn{2}{p{.2\linewidth}|}{Not enjoyable to play. Few meaningful decisions or dramatic tension. Struggle to identify almost any enjoyable aspect of the theme, mechanics, or presentation. Can?t see how the game can be fixed.}
+	& \multicolumn{2}{p{.1\linewidth}}{Seems that the game was never played. }\\\hline
+\multicolumn{10}{l}{{\bf Presentation}}\\\hline
+Prototype & 8 & 7 & 6 & 5 & 4 & 3 & 2 & 1 & 0\\\hline
+20\% 
+	& \multicolumn{2}{p{.1\linewidth}|}{The prototype is functional and adds to the enjoyment. Easy for players to know what is going on. Use of the pieces feel natural to the players.}
+	& \multicolumn{3}{p{.1\linewidth}|}{The prototype is playable, but the mechanics at times are unclear or impeded by the presentation. Some pieces are awkward or distracting from the game itself. Sometimes hard to follow what is going on.}
+	& \multicolumn{2}{p{.1\linewidth}|}{Unplayable. Pieces missing, not explained, or not usable for the purpose explained.}
+	& \multicolumn{2}{p{.1\linewidth}}{Seems unlikely the prototype was tested.}\\\hline
+Rules & 8 & 7 & 6 & 5 & 4 & 3 & 2 & 1 & 0\\\hline
+20\% 
+	& \multicolumn{2}{p{.1\linewidth}|}{The rules are clear, easy to understand, and well-written. They are streamlined and have few clumsy exceptions. Included strategy tips, summary sheets, and/ or examples aid understanding or support the theme.}
+	& \multicolumn{3}{p{.1\linewidth}|}{The rules describe a playable game with occasional ambiguity. Some rules were confusing and unclear. Cumbersome exceptions or lack of player aids and examples required regular consultation of the rules and impeded play. Not always obvious how to carry out certain rules or what to do during play. Some, mostly minor, spelling and grammatical errors.}
+	& \multicolumn{2}{p{.1\linewidth}|}{Rules as given could not be interpreted into a playable game. Contained egregious or persistent spelling and grammatical errors.}
+	& \multicolumn{2}{p{.1\linewidth}}{Seems unlikely the rules were read through.}\\\hline
+
+\multicolumn{10}{l}{{\bf Constraints}}\\\hline
+
+Technical & \multicolumn{2}{p{.1\linewidth}}{4|} & \multicolumn{3}{c|}{3-2} & \multicolumn{2}{c}{1} & \multicolumn{2}{c}{0} \\\hline
+20\% 
+	& \multicolumn{2}{p{.1\linewidth}|}{Meets all the technical constraints consistently and naturally. Complete w.r.t. assignment specification.}
+	& \multicolumn{3}{p{.1\linewidth}|}{Game meets constraints by a strict interpretation, but they feel forced or unnatural.}
+	& \multicolumn{2}{p{.1\linewidth}|}{Game did not meet constraints or is missing requirements.}
+	& \multicolumn{2}{p{.1\linewidth}}{Game egregiously violates assignment specification.}\\\hline
+Inspirational & \multicolumn{2}{p{.1\linewidth}|}{4} & \multicolumn{3}{c|}{3-2} & \multicolumn{2}{c|}{1} & \multicolumn{2}{c}{0} \\\hline
+20\% 
+	& \multicolumn{2}{p{.1\linewidth}|}{Creatively and original embraces the inspirational constraints.}
+	& \multicolumn{3}{p{.1\linewidth}|}{Inspirational constraints clearly accounted for but incorporated artificially, more as an after-thought, or in an unoriginal fashion.}
+	& \multicolumn{2}{p{.1\linewidth}|}{Tenuous connection to inspirational constraints.}
+	& \multicolumn{2}{p{.1\linewidth}}{No apparent connection to the inspirational constraints.}\\\hline
+\end{tabular}
+%\caption{Table of results for this interesting experiment comparing these particular methods.}
+\end{center}
+\end{table}
+
+\end{document}
